@@ -1,0 +1,357 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ArrowUpRight from "@/components/fundations/icons/ArrowUpRight.astro";
+import { getAllProjects, getAllProjectSlugs } from "@/lib/queries";
+import { urlFor, fileUrl } from "@/lib/sanity";
+import type { Project } from "@/lib/types";
+
+export async function getStaticPaths() {
+  const projects = await getAllProjects();
+  return projects.map((project) => ({
+    params: { slug: project.slug.current },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+
+const videoSrc =
+  project.thumbnailType === "video" && project.thumbnailVideo?.asset?._ref
+    ? fileUrl(project.thumbnailVideo.asset._ref)
+    : null;
+
+const gifSrc =
+  project.thumbnailType === "gif" && project.thumbnailGif?.asset?._ref
+    ? urlFor(project.thumbnailGif).width(1800).fit("max").url()
+    : null;
+
+const allProjects = await getAllProjects();
+const relatedProjects = allProjects
+  .filter((p) => p._id !== project._id)
+  .slice(0, 4);
+---
+
+<BaseLayout showSearch={true}>
+  <section class="pt-24">
+    <Wrapper variant="standard" class="pb-6">
+      <a
+        href="/"
+        class="inline-flex items-center gap-1 text-xs text-base-500 hover:text-base-900 transition-colors"
+      >
+        ← Back to all animations
+      </a>
+    </Wrapper>
+  </section>
+
+  <section>
+    <Wrapper variant="standard" class="pb-16">
+      <div
+        class="grid gap-10 items-start"
+        style="grid-template-columns: 1fr;"
+        data-detail-grid
+      >
+        <div class="flex flex-col gap-6">
+          <div>
+            <Text
+              tag="h1"
+              variant="displayMD"
+              class="text-base-900 font-display font-light text-balance leading-tight"
+            >
+              {project.title}
+            </Text>
+            <Text
+              tag="p"
+              variant="textBase"
+              class="text-base-600 mt-4 text-balance"
+            >
+              {project.description}
+            </Text>
+          </div>
+
+          {
+            project.technologies && project.technologies.length > 0 && (
+              <div>
+                <Text
+                  tag="h3"
+                  variant="textXS"
+                  class="text-base-500 uppercase tracking-wide font-medium mb-2"
+                >
+                  Technologies
+                </Text>
+                <div class="flex flex-wrap gap-1.5">
+                  {project.technologies.map((tech) => (
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs bg-base-100 text-base-700 capitalize">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+
+          <div>
+            <div class="flex items-baseline justify-between gap-4 mb-2">
+              <Text
+                tag="h3"
+                variant="textXS"
+                class="text-base-500 uppercase tracking-wide font-medium"
+              >
+                The Prompt
+              </Text>
+              <button
+                type="button"
+                id="copyPromptIcon"
+                data-prompt={project.copyPrompt}
+                class="text-xs text-base-500 hover:text-base-900 transition-colors inline-flex items-center gap-1 font-medium"
+                aria-label="Copy prompt"
+              >
+                <span data-copy-label>Copy</span>
+              </button>
+            </div>
+            <div class="relative bg-base-50 rounded-lg border border-base-100 overflow-hidden">
+              <pre
+                class="font-mono text-xs text-base-700 whitespace-pre-wrap break-words max-h-80 overflow-y-auto scrollbar-hide p-4 leading-relaxed"
+                data-prompt-pre>
+{project.copyPrompt}
+              </pre>
+              <div
+                class="pointer-events-none absolute inset-x-0 bottom-0 h-16 transition-opacity duration-200"
+                style="background: linear-gradient(to top, var(--color-base-50) 0%, transparent 100%);"
+                data-prompt-fade>
+              </div>
+            </div>
+            <Text tag="p" variant="textXS" class="text-base-500 mt-2">
+              Paste into Claude Code, Cursor, v0, or Lovable.
+            </Text>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <Button
+              type="button"
+              size="base"
+              variant="accent"
+              id="copyPromptMain"
+              data-prompt={project.copyPrompt}
+              class="w-full justify-center"
+            >
+              <span data-copy-label>Copy Prompt</span>
+            </Button>
+            {
+              project.viewCodeUrl && (
+                <Button
+                  isLink
+                  size="base"
+                  variant="muted"
+                  href={project.viewCodeUrl}
+                  title="View Code"
+                  class="w-full justify-center"
+                >
+                  View Code
+                  <ArrowUpRight slot="icon" class="size-3" />
+                </Button>
+              )
+            }
+          </div>
+        </div>
+
+        <div class="rounded-xl overflow-hidden bg-base-50 shadow-sm">
+          {
+            videoSrc && (
+              <video
+                src={videoSrc}
+                class="w-full block bg-base-100"
+                autoplay
+                loop
+                muted
+                playsinline
+                preload="metadata"
+                disablepictureinpicture
+              />
+            )
+          }
+          {
+            gifSrc && (
+              <img
+                src={gifSrc}
+                alt={project.title}
+                class="w-full block bg-base-100"
+                loading="lazy"
+                decoding="async"
+              />
+            )
+          }
+          {
+            !videoSrc && !gifSrc && (
+              <div
+                class="w-full bg-base-100 flex items-center justify-center"
+                style="aspect-ratio: 16 / 9;"
+              >
+                <Text tag="span" variant="textSM" class="text-base-400">
+                  No preview available
+                </Text>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+
+  <style>
+    @media (min-width: 1024px) {
+      [data-detail-grid] {
+        grid-template-columns: 1fr 2fr !important;
+      }
+    }
+  </style>
+
+  {
+    relatedProjects.length > 0 && (
+      <section class="border-t border-base-100">
+        <Wrapper variant="standard" class="py-16">
+          <Text
+            tag="h2"
+            variant="displaySM"
+            class="text-base-900 font-display font-thin mb-8 text-center"
+          >
+            More animations
+          </Text>
+          <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {relatedProjects.map((p) => (
+              <a
+                href={`/projects/${p.slug.current}`}
+                class="group block"
+                title={p.title}
+              >
+                <div class="relative p-4 bg-base-50 rounded-lg overflow-hidden">
+                  {p.thumbnailType === "video" && p.thumbnailVideo?.asset?._ref ? (
+                    <video
+                      src={fileUrl(p.thumbnailVideo.asset._ref) || undefined}
+                      class="w-full rounded bg-base-100"
+                      style="aspect-ratio: 16 / 9; object-fit: cover;"
+                      autoplay
+                      loop
+                      muted
+                      playsinline
+                      preload="metadata"
+                    />
+                  ) : p.thumbnailType === "gif" && p.thumbnailGif?.asset?._ref ? (
+                    <img
+                      src={urlFor(p.thumbnailGif).width(900).fit("max").url()}
+                      alt={p.title}
+                      class="w-full rounded bg-base-100"
+                      style="aspect-ratio: 16 / 9; object-fit: cover;"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="w-full rounded bg-base-100" style="aspect-ratio: 16 / 9;" />
+                  )}
+                </div>
+                <Text tag="h3" variant="textSM" class="text-base-600 capitalize mt-2">
+                  {p.title}
+                </Text>
+              </a>
+            ))}
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+
+  <div
+    id="copyToast"
+    class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 hidden bg-base-900 text-white px-6 py-3 rounded-lg shadow-lg text-sm transition-all duration-300 ease-out opacity-0 translate-y-2"
+    role="status"
+    aria-live="polite"
+  >
+    <span id="copyToastText">Prompt copied — paste into Claude Code, Cursor, v0, or Lovable</span>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    const pre = document.querySelector("[data-prompt-pre]");
+    const fade = document.querySelector("[data-prompt-fade]");
+    if (pre && fade) {
+      const updateFade = () => {
+        const atBottom = pre.scrollTop + pre.clientHeight >= pre.scrollHeight - 4;
+        const hasOverflow = pre.scrollHeight > pre.clientHeight;
+        fade.style.opacity = !hasOverflow || atBottom ? "0" : "1";
+      };
+      pre.addEventListener("scroll", updateFade);
+      updateFade();
+    }
+
+    const buttons = document.querySelectorAll("[data-prompt]");
+    const toast = document.getElementById("copyToast");
+    const toastText = document.getElementById("copyToastText");
+
+    const showToast = (message, isError = false) => {
+      if (!toast || !toastText) return;
+      toastText.textContent = message;
+      toast.classList.toggle("bg-red-600", isError);
+      toast.classList.toggle("bg-base-900", !isError);
+      toast.classList.remove("hidden");
+      requestAnimationFrame(() => {
+        toast.classList.remove("opacity-0", "translate-y-2");
+      });
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.classList.add("hidden"), 300);
+      }, 2800);
+    };
+
+    const fallbackCopy = (text) => {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch (_) {}
+      document.body.removeChild(ta);
+      return ok;
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const prompt = btn.getAttribute("data-prompt") || "";
+        const label = btn.querySelector("[data-copy-label]");
+        const originalText = label ? label.textContent : "";
+
+        let copied = false;
+        if (navigator.clipboard && window.isSecureContext) {
+          try {
+            await navigator.clipboard.writeText(prompt);
+            copied = true;
+          } catch (_) {
+            copied = fallbackCopy(prompt);
+          }
+        } else {
+          copied = fallbackCopy(prompt);
+        }
+
+        if (copied) {
+          if (label) label.textContent = "Copied ✓";
+          showToast("Prompt copied — paste into Claude Code, Cursor, v0, or Lovable");
+          console.log("[animate.dev] prompt_copied");
+          setTimeout(() => {
+            if (label) label.textContent = originalText;
+          }, 2000);
+        } else {
+          showToast("Couldn't copy — please select and copy manually", true);
+        }
+      });
+    });
+  })();
+</script>

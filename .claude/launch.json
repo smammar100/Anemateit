@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Astro Dev Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 4321,
+      "autoPort": true
+    },
+    {
+      "name": "Astro Preview Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview"],
+      "port": 4321,
+      "autoPort": true
+    },
+    {
+      "name": "Sanity Studio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "studio:dev"],
+      "port": 3333,
+      "autoPort": true
+    }
+  ]
+}
