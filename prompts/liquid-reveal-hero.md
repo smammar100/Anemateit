@@ -228,6 +228,19 @@ export function LiquidRevealHero({
 
 Any two images work. Best results: portrait-orientation PNGs/WebPs with a transparent or matching-color background, subject anchored to the bottom of the frame.
 
+### Paste-and-run demo (no asset hunt)
+
+For instant gratification in v0 / Lovable / Bolt — Picsum serves a deterministic image per seed, no API key, CORS-safe:
+
+```tsx
+<LiquidRevealHero
+  portraitSrc="https://picsum.photos/seed/portrait/1200/1600"
+  revealSrc="https://picsum.photos/seed/helmet/1200/1600"
+/>
+```
+
+You'll see two random photos swap on hover — enough to verify the effect works. Then swap the URLs for your real assets.
+
 ## How the goo works (1-minute mental model)
 
 1. Four `<circle>` elements follow the cursor through springs of different stiffness — they're physically separate but visually we want **one** organic blob.
