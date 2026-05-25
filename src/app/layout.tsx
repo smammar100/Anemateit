@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import PageTransition from '@/components/global/PageTransition';
 
 export const metadata: Metadata = {
   title: 'Lexington Themes',
@@ -53,9 +52,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-white flex flex-col lg:min-h-svh">
-        <PageTransition>{children}</PageTransition>
-      </body>
+      <body className="bg-white flex flex-col lg:min-h-svh">{children}</body>
     </html>
   );
 }
