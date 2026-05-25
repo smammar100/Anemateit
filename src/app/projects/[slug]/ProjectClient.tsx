@@ -4,7 +4,20 @@ import Text from '@/components/fundations/elements/Text';
 import Button from '@/components/fundations/elements/Button';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import { ArrowUpRight } from '@/components/fundations/icons/Icons';
+import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import type { Project } from '@/lib/types';
+
+// Live demos keyed by slug. Project slugs in this map render the actual
+// React component instead of the recorded reference video/GIF.
+const LIVE_DEMO_IMAGES: Record<string, string[]> = {
+  'morphing-svg-mask-slider': [
+    'https://picsum.photos/seed/morph1/1200/750',
+    'https://picsum.photos/seed/morph2/1200/750',
+    'https://picsum.photos/seed/morph3/1200/750',
+    'https://picsum.photos/seed/morph4/1200/750',
+    'https://picsum.photos/seed/morph5/1200/750',
+  ],
+};
 
 type Props = {
   project: Project;
@@ -175,7 +188,21 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
             </div>
 
             <div className="rounded-xl overflow-hidden bg-base-50 shadow-sm">
-              {videoSrc && (
+              {LIVE_DEMO_IMAGES[project.slug.current] ? (
+                <div className="bg-white p-8">
+                  <MorphingSvgMaskSlider
+                    images={LIVE_DEMO_IMAGES[project.slug.current]}
+                  />
+                  <Text
+                    tag="p"
+                    variant="textXS"
+                    className="text-base-500 mt-4 text-center"
+                  >
+                    Live demo — click the arrows to morph between mask shapes.
+                  </Text>
+                </div>
+              ) : null}
+              {!LIVE_DEMO_IMAGES[project.slug.current] && videoSrc && (
                 <video
                   src={videoSrc}
                   className="w-full block bg-base-100"
@@ -187,7 +214,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                   disablePictureInPicture
                 />
               )}
-              {gifSrc && (
+              {!LIVE_DEMO_IMAGES[project.slug.current] && gifSrc && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={gifSrc}
@@ -196,7 +223,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                   loading="lazy"
                 />
               )}
-              {!videoSrc && !gifSrc && (
+              {!LIVE_DEMO_IMAGES[project.slug.current] && !videoSrc && !gifSrc && (
                 <div
                   className="w-full bg-base-100 flex items-center justify-center"
                   style={{ aspectRatio: '16 / 9' }}
