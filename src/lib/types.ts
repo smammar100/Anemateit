@@ -43,5 +43,6 @@ export interface Project {
   category?: Category
   technologies?: string[]
   copyPrompt: string
+  codeFiles?: { filename: string; content: string }[]
   viewCodeUrl?: string
 }

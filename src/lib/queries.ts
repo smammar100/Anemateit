@@ -13,6 +13,7 @@ const PROJECT_FIELDS = `
   category->{_id, _type, title, slug, order},
   technologies,
   copyPrompt,
+  codeFiles[]{filename, content},
   viewCodeUrl
 `
 

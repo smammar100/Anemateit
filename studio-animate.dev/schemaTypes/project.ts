@@ -77,6 +77,35 @@ export const project = defineType({
       validation: (R) => R.required(),
     }),
     defineField({
+      name: 'codeFiles',
+      title: 'Downloadable Code Files',
+      type: 'array',
+      description:
+        'Files bundled into the .zip when users click "Download Code". Use forward slashes in filenames for folders, e.g. components/MyComp.tsx.',
+      of: [
+        {
+          type: 'object',
+          name: 'codeFile',
+          fields: [
+            defineField({
+              name: 'filename',
+              title: 'Filename (with optional path)',
+              type: 'string',
+              validation: (R) => R.required(),
+            }),
+            defineField({
+              name: 'content',
+              title: 'File Content',
+              type: 'text',
+              rows: 20,
+              validation: (R) => R.required(),
+            }),
+          ],
+          preview: {select: {title: 'filename', subtitle: 'content'}},
+        },
+      ],
+    }),
+    defineField({
       name: 'viewCodeUrl',
       title: 'View Code',
       type: 'url',

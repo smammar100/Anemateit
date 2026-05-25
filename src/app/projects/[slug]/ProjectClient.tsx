@@ -85,6 +85,26 @@ function CodeIcon({ className }: { className?: string }) {
   );
 }
 
+function DownloadIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+  );
+}
+
 export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const [showFade, setShowFade] = useState(true);
@@ -117,6 +137,22 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
     } catch {}
     document.body.removeChild(ta);
     return ok;
+  };
+
+  const downloadCode = async () => {
+    if (!project.codeFiles?.length) return;
+    const { default: JSZip } = await import('jszip');
+    const zip = new JSZip();
+    for (const f of project.codeFiles) zip.file(f.filename, f.content);
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${project.slug.current}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const copyPrompt = async () => {
@@ -171,6 +207,17 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
               >
                 {copyState === 'copied' ? 'Copied ✓' : 'Copy Prompt'}
               </Button>
+              {project.codeFiles && project.codeFiles.length > 0 && (
+                <Button
+                  type="button"
+                  size="xs"
+                  variant="default"
+                  onClick={downloadCode}
+                  leftIcon={<DownloadIcon className="size-3" />}
+                >
+                  Download Code
+                </Button>
+              )}
             </div>
           </div>
         </Wrapper>
