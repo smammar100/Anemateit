@@ -269,7 +269,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
               )}
 
               <div className="flex flex-col min-h-0 lg:flex-1">
-                <div className="flex flex-wrap items-center gap-2 mb-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <Text
                     tag="h3"
                     variant="textSM"
@@ -277,26 +277,28 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                   >
                     How to use
                   </Text>
-                  <button
-                    type="button"
-                    onClick={copyPrompt}
-                    className="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs text-base-700 bg-base-100 hover:bg-base-200 transition-colors font-medium"
-                  >
-                    <CopyIcon className="size-3" />
-                    {copyState === 'copied' ? 'Copied' : 'Copy prompt'}
-                  </button>
-                  {project.viewCodeUrl && (
-                    <a
-                      href={project.viewCodeUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={copyPrompt}
                       className="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs text-base-700 bg-base-100 hover:bg-base-200 transition-colors font-medium"
                     >
-                      <CodeIcon className="size-3" />
-                      View code
-                      <ArrowUpRight className="size-2.5" />
-                    </a>
-                  )}
+                      <CopyIcon className="size-3" />
+                      {copyState === 'copied' ? 'Copied' : 'Copy prompt'}
+                    </button>
+                    {project.viewCodeUrl && (
+                      <a
+                        href={project.viewCodeUrl}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs text-base-700 bg-base-100 hover:bg-base-200 transition-colors font-medium"
+                      >
+                        <CodeIcon className="size-3" />
+                        View code
+                        <ArrowUpRight className="size-2.5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
                 <div className="relative bg-base-50 rounded-lg border border-base-100 overflow-hidden lg:flex-1 lg:min-h-0">
                   <pre
