@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import Text from '@/components/fundations/elements/Text';
@@ -11,9 +12,6 @@ import PerspectiveHighlightDemo from '@/components/perspective/PerspectiveHighli
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import type { Project } from '@/lib/types';
 
-// Live demo renderers keyed by slug. When a slug matches, the project
-// detail page renders the actual React component from the prompt instead
-// of the recorded reference video/GIF.
 const LIVE_DEMOS: Record<string, () => ReactNode> = {
   'morphing-svg-mask-slider': () => (
     <MorphingSvgMaskSlider
@@ -45,10 +43,49 @@ type Props = {
   gifSrc: string | null;
 };
 
+function CopyIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  );
+}
+
+function CodeIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  );
+}
+
 export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const [showFade, setShowFade] = useState(true);
   const preRef = useRef<HTMLPreElement>(null);
+  const hasLiveDemo = Boolean(LIVE_DEMOS[project.slug.current]);
 
   useEffect(() => {
     const pre = preRef.current;
@@ -96,14 +133,102 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
 
   return (
     <>
-      <section>
+      <header className="fixed w-full top-0 z-20 bg-white border-b border-base-100 py-3">
+        <Wrapper variant="standard">
+          <div className="flex items-center justify-between gap-4">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-xs text-base-500 hover:text-base-900 transition-colors"
+            >
+              <span aria-hidden="true">←</span>
+              <span>Components</span>
+              <span className="text-base-300">/</span>
+              <span className="text-base-900 font-medium capitalize">{project.title}</span>
+            </Link>
+
+            <div className="flex items-center gap-2">
+              {project.viewCodeUrl && (
+                <a
+                  href={project.viewCodeUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md px-3 text-xs text-base-700 hover:text-base-900 hover:bg-base-100 transition-colors"
+                >
+                  <CodeIcon className="size-3" />
+                  View code
+                </a>
+              )}
+              <Button
+                type="button"
+                size="xs"
+                variant="default"
+                onClick={copyPrompt}
+                leftIcon={<CopyIcon className="size-3" />}
+              >
+                {copyState === 'copied' ? 'Copied ✓' : 'Copy Prompt'}
+              </Button>
+            </div>
+          </div>
+        </Wrapper>
+      </header>
+
+      <section className="pt-20">
         <Wrapper variant="standard" className="pb-16">
-          <div className="flex flex-col gap-10 items-stretch">
-            <div className="flex flex-col gap-6 order-2">
+          <div className="flex w-full flex-col lg:flex-row lg:gap-8">
+            <div className="order-1 lg:order-2 lg:flex-1 lg:sticky lg:top-20 lg:self-start lg:h-[calc(100dvh-11rem)]">
+              <div className="rounded-xl overflow-hidden bg-base-50 border border-base-100 w-full h-full flex flex-col">
+                {hasLiveDemo ? (
+                  <div className="bg-white flex flex-col flex-1 min-h-0">
+                    <div className="flex-1 flex items-center justify-center min-h-[24rem] p-6 overflow-auto">
+                      {LIVE_DEMOS[project.slug.current]()}
+                    </div>
+                    <div className="border-t border-base-100 py-3 px-4 shrink-0">
+                      <Text tag="p" variant="textXS" className="text-base-500 text-center">
+                        Live demo — interact with it.
+                      </Text>
+                    </div>
+                  </div>
+                ) : null}
+                {!hasLiveDemo && videoSrc && (
+                  <div className="flex-1 flex items-center justify-center bg-base-100 min-h-0">
+                    <video
+                      src={videoSrc}
+                      className="w-full h-full max-h-full object-contain"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                      disablePictureInPicture
+                    />
+                  </div>
+                )}
+                {!hasLiveDemo && gifSrc && (
+                  <div className="flex-1 flex items-center justify-center bg-base-100 min-h-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={gifSrc}
+                      alt={project.title}
+                      className="w-full h-full max-h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                {!hasLiveDemo && !videoSrc && !gifSrc && (
+                  <div className="flex-1 w-full bg-base-100 flex items-center justify-center min-h-[24rem]">
+                    <Text tag="span" variant="textSM" className="text-base-400">
+                      No preview available
+                    </Text>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="order-2 lg:order-1 lg:w-[30%] lg:shrink-0 flex flex-col gap-6 pt-8 lg:pt-0 lg:h-[calc(100dvh-11rem)]">
               <div>
                 <Text
                   tag="h1"
-                  variant="displayMD"
+                  variant="displaySM"
                   className="text-base-900 font-display font-light text-balance leading-tight"
                 >
                   {project.title}
@@ -111,7 +236,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                 <Text
                   tag="p"
                   variant="textBase"
-                  className="text-base-600 mt-4 text-balance"
+                  className="text-base-500 mt-2 text-balance"
                 >
                   {project.description}
                 </Text>
@@ -121,8 +246,8 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                 <div>
                   <Text
                     tag="h3"
-                    variant="textXS"
-                    className="text-base-500 uppercase tracking-wide font-medium mb-2"
+                    variant="textSM"
+                    className="text-base-900 font-semibold mb-2"
                   >
                     Technologies
                   </Text>
@@ -139,28 +264,40 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                 </div>
               )}
 
-              <div>
-                <div className="flex items-baseline justify-between gap-4 mb-2">
-                  <Text
-                    tag="h3"
-                    variant="textXS"
-                    className="text-base-500 uppercase tracking-wide font-medium"
-                  >
-                    The Prompt
-                  </Text>
+              <div className="flex flex-col min-h-0 lg:flex-1">
+                <Text
+                  tag="h3"
+                  variant="textSM"
+                  className="text-base-900 font-semibold mb-2"
+                >
+                  How to use
+                </Text>
+                <div className="flex flex-wrap gap-1.5 mb-3">
                   <button
                     type="button"
                     onClick={copyPrompt}
-                    className="text-xs text-base-500 hover:text-base-900 transition-colors inline-flex items-center gap-1 font-medium"
-                    aria-label="Copy prompt"
+                    className="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs text-base-700 bg-base-100 hover:bg-base-200 transition-colors font-medium"
                   >
-                    {copyState === 'copied' ? 'Copied ✓' : 'Copy'}
+                    <CopyIcon className="size-3" />
+                    {copyState === 'copied' ? 'Copied' : 'Copy prompt'}
                   </button>
+                  {project.viewCodeUrl && (
+                    <a
+                      href={project.viewCodeUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs text-base-700 bg-base-100 hover:bg-base-200 transition-colors font-medium"
+                    >
+                      <CodeIcon className="size-3" />
+                      View code
+                      <ArrowUpRight className="size-2.5" />
+                    </a>
+                  )}
                 </div>
-                <div className="relative bg-base-50 rounded-lg border border-base-100 overflow-hidden">
+                <div className="relative bg-base-50 rounded-lg border border-base-100 overflow-hidden lg:flex-1 lg:min-h-0">
                   <pre
                     ref={preRef}
-                    className="font-mono text-xs text-base-700 whitespace-pre-wrap break-words max-h-80 overflow-y-auto scrollbar-hide p-4 leading-relaxed"
+                    className="font-mono text-xs text-base-700 whitespace-pre-wrap break-words max-h-72 lg:max-h-none lg:h-full overflow-y-auto scrollbar-hide p-4 leading-relaxed"
                   >
                     {project.copyPrompt}
                   </pre>
@@ -173,81 +310,10 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                     }}
                   />
                 </div>
-                <Text tag="p" variant="textXS" className="text-base-500 mt-2">
+                <Text tag="p" variant="textXS" className="text-base-500 mt-2 shrink-0">
                   Paste into Claude Code, Cursor, v0, or Lovable.
                 </Text>
               </div>
-
-              <div className="flex flex-col gap-2">
-                <Button
-                  type="button"
-                  size="base"
-                  variant="accent"
-                  onClick={copyPrompt}
-                  className="w-full justify-center"
-                >
-                  {copyState === 'copied' ? 'Copied ✓' : 'Copy Prompt'}
-                </Button>
-                {project.viewCodeUrl && (
-                  <Button
-                    isLink
-                    size="base"
-                    variant="muted"
-                    href={project.viewCodeUrl}
-                    title="View Code"
-                    className="w-full justify-center"
-                    rightIcon={<ArrowUpRight className="size-3" />}
-                  >
-                    View Code
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-xl overflow-hidden bg-base-50 shadow-sm order-1 w-full">
-              {LIVE_DEMOS[project.slug.current] ? (
-                <div className="bg-white">
-                  {LIVE_DEMOS[project.slug.current]()}
-                  <Text
-                    tag="p"
-                    variant="textXS"
-                    className="text-base-500 py-4 text-center"
-                  >
-                    Live demo — interact with it.
-                  </Text>
-                </div>
-              ) : null}
-              {!LIVE_DEMOS[project.slug.current] && videoSrc && (
-                <video
-                  src={videoSrc}
-                  className="w-full block bg-base-100"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  disablePictureInPicture
-                />
-              )}
-              {!LIVE_DEMOS[project.slug.current] && gifSrc && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={gifSrc}
-                  alt={project.title}
-                  className="w-full block bg-base-100"
-                  loading="lazy"
-                />
-              )}
-              {!LIVE_DEMOS[project.slug.current] && !videoSrc && !gifSrc && (
-                <div
-                  className="w-full bg-base-100 flex items-center justify-center"
-                  style={{ aspectRatio: '16 / 9' }}
-                >
-                  <Text tag="span" variant="textSM" className="text-base-400">
-                    No preview available
-                  </Text>
-                </div>
-              )}
             </div>
           </div>
         </Wrapper>

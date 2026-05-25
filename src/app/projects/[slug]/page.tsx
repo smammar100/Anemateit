@@ -37,18 +37,7 @@ export default async function ProjectPage({
     .slice(0, 4);
 
   return (
-    <SiteShell showSearch>
-      <section className="pt-24">
-        <Wrapper variant="standard" className="pb-6">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-xs text-base-500 hover:text-base-900 transition-colors"
-          >
-            ← Back to all animations
-          </Link>
-        </Wrapper>
-      </section>
-
+    <SiteShell hideNavigation showSearch>
       <ProjectClient project={project} videoSrc={videoSrc} gifSrc={gifSrc} />
 
       {relatedProjects.length > 0 && (

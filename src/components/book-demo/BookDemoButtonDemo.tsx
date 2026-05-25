@@ -1,25 +1,56 @@
 "use client";
+import { useState } from "react";
 import BookDemoButton from "./BookDemoButton";
 import type { BookDemoVariant } from "./BookDemoButton";
+import { cn } from "@/lib/utils";
 
-const variants: BookDemoVariant[] = [
-  "lime",
-  "sky",
-  "rose",
-  "amber",
-  "emerald",
-  "violet",
-  "orange",
-  "magenta",
+const variants: { name: BookDemoVariant; color: string }[] = [
+  { name: "lime", color: "#c5ea2c" },
+  { name: "sky", color: "#6bc8f5" },
+  { name: "rose", color: "#f590a5" },
+  { name: "amber", color: "#f5a82e" },
+  { name: "emerald", color: "#5fd49a" },
+  { name: "violet", color: "#a07bf5" },
+  { name: "orange", color: "#f57a3a" },
+  { name: "magenta", color: "#e060c5" },
 ];
 
 export default function BookDemoButtonDemo() {
+  const [variant, setVariant] = useState<BookDemoVariant>("lime");
+
   return (
-    <div className="flex flex-col items-center justify-center gap-6 py-12 px-6">
-      <div className="flex flex-wrap items-center justify-center gap-4">
-        {variants.map((v) => (
-          <BookDemoButton key={v} variant={v} />
-        ))}
+    <div className="flex h-full w-full flex-col items-center justify-center gap-14 py-12 px-6">
+      <div className="flex h-[88px] w-[288px] items-center justify-center">
+        <div className="origin-center scale-[2]">
+          <BookDemoButton variant={variant} />
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center gap-3">
+        <span className="text-[10px] uppercase tracking-[0.18em] text-base-400 font-medium">
+          Color
+        </span>
+        <div className="flex items-center gap-2.5 rounded-full border border-base-100 bg-white/60 backdrop-blur px-3 py-2 shadow-sm">
+          {variants.map((v) => (
+            <button
+              key={v.name}
+              type="button"
+              onClick={() => setVariant(v.name)}
+              aria-label={`Switch to ${v.name} color`}
+              aria-pressed={variant === v.name}
+              className={cn(
+                "size-6 rounded-full outline-none ring-offset-2 ring-offset-white transition-all duration-200 cursor-pointer",
+                variant === v.name
+                  ? "ring-2 ring-base-900 scale-110"
+                  : "ring-1 ring-base-200/80 hover:scale-110 hover:ring-base-400"
+              )}
+              style={{ backgroundColor: v.color }}
+            />
+          ))}
+        </div>
+        <span className="text-xs text-base-500 capitalize font-medium tracking-tight">
+          {variant}
+        </span>
       </div>
     </div>
   );
