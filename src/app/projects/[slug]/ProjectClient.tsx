@@ -211,7 +211,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                 <Button
                   type="button"
                   size="xs"
-                  variant="default"
+                  variant="muted"
                   onClick={downloadCode}
                   leftIcon={<DownloadIcon className="size-3" />}
                 >
