@@ -2,15 +2,30 @@
 
 A card that tilts toward your cursor in 3D space. Phrases marked as `<Highlight>` physically rise forward — a `translate` going one direction and a `box-shadow` going the other create the illusion of depth.
 
-**Stack:** React + Tailwind + TypeScript. **No** 3D library, **no** animation library. Just CSS transforms + one `requestAnimationFrame` loop. Drop-in single file — works in v0, Lovable, Bolt, Next.js, or plain Vite/React.
+## Setup
 
-## Install
+**Works in:** v0 · Lovable · Bolt · Cursor · Next.js App Router · Vite + React. Single drop-in file.
+
+**Dependencies:** Zero runtime deps — pure React + Tailwind + CSS transforms.
 
 ```bash
-# Nothing to npm install. Pure React + Tailwind.
+# No npm install needed.
 ```
 
-Tailwind is assumed. If you don't have it, replace the `className` strings with inline `style` — the 3D classes (`[perspective:1200px]`, `[transform-style:preserve-3d]`) are just Tailwind arbitrary values.
+**`'use client';` directive:** The component file starts with `'use client';`. **Keep it** in Next.js App Router (v0 default). **Delete that line** in Vite, Lovable, Bolt, or any other plain React setup — it's an inert string there but some bundlers warn on it.
+
+**Fonts:** No custom fonts. Uses whatever default sans-serif your project provides.
+
+**Tailwind:** Standard utilities + a couple of arbitrary-value brackets (`[perspective:1200px]`, `[transform-style:preserve-3d]`). No custom `tailwind.config` changes, no theme tokens. If you don't have Tailwind, rewrite `className` strings as inline `style` — the layout has no dependency on custom classes.
+
+**Quick usage:**
+
+```tsx
+import { Perspective, Highlight } from './components/PerspectiveHighlight';
+// <Perspective><p>Tilt me, <Highlight color="green">lift this</Highlight></p></Perspective>
+```
+
+---
 
 ## Component (paste into `components/PerspectiveHighlight.tsx`)
 

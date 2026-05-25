@@ -2,16 +2,33 @@
 
 Build a hero where a portrait reveals an alternate "reveal" image (helmet, alt shot, anything) under the cursor, with a **liquid-edged brush mask** plus a **diagonal wireframe sweep** that shimmers across the lit area every few seconds. Two textured planes drawn to a WebGL canvas through a custom GLSL fragment shader. Inspired by landonorris.com (OFF+BRAND); shader adapted from a CodePen by Daniel Muñoz.
 
-**Stack:** React + Tailwind + Three.js + one fragment shader (inline). **No** other animation libraries. Drop-in single file — works in v0, Lovable, Bolt, Next.js, or plain Vite/React.
+## Setup
 
-## Install
+**Works in:** v0 · Lovable · Bolt · Cursor · Next.js App Router · Vite + React. Single drop-in file.
+
+**Dependencies:** `three` (runtime) and `@types/three` (dev — TypeScript only). Three.js adds ~150 KB gzipped — the GLSL shader is inline, no other graphics libraries required.
 
 ```bash
 npm i three
 npm i -D @types/three
 ```
 
-Tailwind is assumed for the wordmark/backdrop overlay positioning. If you don't have it, replace the `className` strings with inline `style` — the layout is `absolute` + `clamp()`.
+**`'use client';` directive:** The component file starts with `'use client';`. **Keep it** in Next.js App Router (v0 default). **Delete that line** in Vite, Lovable, Bolt, or any other plain React setup — it's an inert string there but some bundlers warn on it.
+
+**Fonts:** No custom fonts. The wordmark / backdrop overlays use whatever default sans-serif your project provides (the look is bold + italic via Tailwind utilities — no specific font family).
+
+**Tailwind:** Standard utilities only — used for the wordmark/backdrop overlay positioning (`absolute` + `clamp()`). No custom `tailwind.config` changes, no theme tokens. If you don't have Tailwind, rewrite `className` strings as inline `style` — the layout has no dependency on custom classes.
+
+**Quick usage:**
+
+```tsx
+import LiquidRevealHero from './components/LiquidRevealHero';
+// <div className="aspect-[16/9] w-full">
+//   <LiquidRevealHero portraitSrc="https://picsum.photos/seed/p/1200/1600" revealSrc="https://picsum.photos/seed/h/1200/1600" />
+// </div>
+```
+
+---
 
 ## Component (paste into `components/LiquidRevealHero.tsx`)
 

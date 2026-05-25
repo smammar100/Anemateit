@@ -10,6 +10,7 @@ import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import LiquidRevealHero from '@/components/liquid-reveal/LiquidRevealHero';
 import PerspectiveHighlightDemo from '@/components/perspective/PerspectiveHighlight';
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
+import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import type { Project } from '@/lib/types';
 
 const LIVE_DEMOS: Record<string, () => ReactNode> = {
@@ -37,6 +38,7 @@ const LIVE_DEMOS: Record<string, () => ReactNode> = {
   ),
   '3d-perspective-highlight': () => <PerspectiveHighlightDemo />,
   'book-demo-button': () => <BookDemoButtonDemo />,
+  'nextjs-conf-cta': () => <NextjsConfCTADemo />,
 };
 
 type Props = {

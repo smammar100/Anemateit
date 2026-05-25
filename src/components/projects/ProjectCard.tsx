@@ -3,6 +3,7 @@ import Text from '@/components/fundations/elements/Text';
 import { urlFor, fileUrl } from '@/lib/sanity';
 import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
+import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import type { Project } from '@/lib/types';
 
 const CARD_IMAGES = [
@@ -17,6 +18,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   const url = `/projects/${project.slug.current}`;
   const isMorphingSlider = project.slug.current === 'morphing-svg-mask-slider';
   const isBookDemo = project.slug.current === 'book-demo-button';
+  const isNextjsConfCta = project.slug.current === 'nextjs-conf-cta';
 
   const videoSrc =
     project.thumbnailType === 'video' && project.thumbnailVideo?.asset?._ref
@@ -30,19 +32,28 @@ export default function ProjectCard({ project }: { project: Project }) {
 
   return (
     <div className="group-hover:opacity-30 hover:opacity-100 peer hover:peer-hover:opacity-30 duration-300 group">
-      <div className="relative p-8 bg-base-50 rounded-lg overflow-hidden">
+      <div
+        className="relative p-4 bg-base-50 rounded-lg overflow-hidden"
+        {...(isNextjsConfCta ? { 'data-cta-trigger': '' } : {})}
+      >
         {isMorphingSlider ? (
-          <div className="aspect-[8/5] w-full rounded shadow bg-base-100 overflow-hidden">
-            <MorphingSvgMaskSlider
-              images={CARD_IMAGES}
-              autoPlay
-              interval={3000}
-              showArrows={false}
-            />
+          <div className="aspect-[8/5] w-full rounded shadow bg-white overflow-hidden flex items-center justify-center p-4">
+            <div className="w-full">
+              <MorphingSvgMaskSlider
+                images={CARD_IMAGES}
+                autoPlay
+                interval={3000}
+                showArrows={false}
+              />
+            </div>
           </div>
         ) : isBookDemo ? (
-          <div className="aspect-[8/5] w-full rounded shadow bg-base-100 overflow-hidden">
+          <div className="aspect-[8/5] w-full rounded shadow bg-white overflow-hidden">
             <BookDemoButtonDemo compact />
+          </div>
+        ) : isNextjsConfCta ? (
+          <div className="aspect-[8/5] w-full rounded shadow bg-white overflow-hidden">
+            <NextjsConfCTADemo compact />
           </div>
         ) : videoSrc ? (
           <video

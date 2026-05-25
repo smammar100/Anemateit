@@ -5,6 +5,7 @@ import Text from '@/components/fundations/elements/Text';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
+import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import { getAllProjects, getProjectBySlug, getAllProjectSlugs } from '@/lib/queries';
 import { urlFor, fileUrl } from '@/lib/sanity';
 import ProjectClient from './ProjectClient';
@@ -64,6 +65,7 @@ export default async function ProjectPage({
               {relatedProjects.map((p) => {
                 const isMorphingSlider = p.slug.current === 'morphing-svg-mask-slider';
                 const isBookDemo = p.slug.current === 'book-demo-button';
+                const isNextjsConfCta = p.slug.current === 'nextjs-conf-cta';
                 const rVideo =
                   p.thumbnailType === 'video' && p.thumbnailVideo?.asset?._ref
                     ? fileUrl(p.thumbnailVideo.asset._ref)
@@ -79,31 +81,43 @@ export default async function ProjectPage({
                     className="group block"
                     title={p.title}
                   >
-                    <div className="relative p-4 bg-base-50 rounded-lg overflow-hidden">
+                    <div
+                      className="relative p-4 bg-base-50 rounded-lg overflow-hidden"
+                      {...(isNextjsConfCta ? { 'data-cta-trigger': '' } : {})}
+                    >
                       {isMorphingSlider ? (
                         <div
-                          className="w-full rounded bg-base-100 overflow-hidden"
-                          style={{ aspectRatio: '16 / 9' }}
+                          className="w-full rounded shadow bg-white overflow-hidden flex items-center justify-center p-4"
+                          style={{ aspectRatio: '8 / 5' }}
                         >
-                          <MorphingSvgMaskSlider
-                            images={CARD_IMAGES}
-                            autoPlay
-                            interval={3000}
-                            showArrows={false}
-                          />
+                          <div className="w-full">
+                            <MorphingSvgMaskSlider
+                              images={CARD_IMAGES}
+                              autoPlay
+                              interval={3000}
+                              showArrows={false}
+                            />
+                          </div>
                         </div>
                       ) : isBookDemo ? (
                         <div
-                          className="w-full rounded bg-base-100 overflow-hidden"
-                          style={{ aspectRatio: '16 / 9' }}
+                          className="w-full rounded shadow bg-white overflow-hidden"
+                          style={{ aspectRatio: '8 / 5' }}
                         >
                           <BookDemoButtonDemo compact />
+                        </div>
+                      ) : isNextjsConfCta ? (
+                        <div
+                          className="w-full rounded shadow bg-white overflow-hidden"
+                          style={{ aspectRatio: '8 / 5' }}
+                        >
+                          <NextjsConfCTADemo compact />
                         </div>
                       ) : rVideo ? (
                         <video
                           src={rVideo}
-                          className="w-full rounded bg-base-100"
-                          style={{ aspectRatio: '16 / 9', objectFit: 'cover' }}
+                          className="w-full rounded shadow bg-white"
+                          style={{ aspectRatio: '8 / 5', objectFit: 'cover' }}
                           autoPlay
                           loop
                           muted
@@ -115,14 +129,14 @@ export default async function ProjectPage({
                         <img
                           src={rGif}
                           alt={p.title}
-                          className="w-full rounded bg-base-100"
-                          style={{ aspectRatio: '16 / 9', objectFit: 'cover' }}
+                          className="w-full rounded shadow bg-white"
+                          style={{ aspectRatio: '8 / 5', objectFit: 'cover' }}
                           loading="lazy"
                         />
                       ) : (
                         <div
-                          className="w-full rounded bg-base-100"
-                          style={{ aspectRatio: '16 / 9' }}
+                          className="w-full rounded shadow bg-white"
+                          style={{ aspectRatio: '8 / 5' }}
                         />
                       )}
                     </div>

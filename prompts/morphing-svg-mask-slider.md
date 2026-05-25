@@ -2,15 +2,30 @@
 
 An image carousel where every slide lives inside an organic SVG clip-path — and the mask shape **morphs** into a completely different blob on each transition. Inspired by tuxkarma.co (Infinite Matter project section).
 
-**Stack:** React + Tailwind + framer-motion + flubber. **No** Three.js, **no** custom shaders. Drop-in single file — works in v0, Lovable, Bolt, Next.js, or plain Vite/React.
+## Setup
 
-## Install
+**Works in:** v0 · Lovable · Bolt · Cursor · Next.js App Router · Vite + React. Single drop-in file.
+
+**Dependencies:** `framer-motion` and `flubber` (~6 KB; handles SVG path interpolation between arbitrarily different paths — so the five built-in shapes can be wildly different and still morph smoothly).
 
 ```bash
 npm i framer-motion flubber
 ```
 
-Tailwind is assumed. Flubber (~6 KB) handles SVG path interpolation between any two paths regardless of their command structure — so the five built-in shapes can be wildly different and still morph smoothly.
+**`'use client';` directive:** The component file starts with `'use client';`. **Keep it** in Next.js App Router (v0 default). **Delete that line** in Vite, Lovable, Bolt, or any other plain React setup — it's an inert string there but some bundlers warn on it.
+
+**Fonts:** No custom fonts. The arrow nav buttons use whatever default sans-serif your project provides.
+
+**Tailwind:** Standard utilities only — no custom `tailwind.config` changes, no theme tokens. If you don't have Tailwind, rewrite `className` strings as inline `style` — the layout has no dependency on custom classes.
+
+**Quick usage:**
+
+```tsx
+import { MorphingSvgMaskSlider } from './components/MorphingSvgMaskSlider';
+// <MorphingSvgMaskSlider images={['https://picsum.photos/seed/a/1200/750', 'https://picsum.photos/seed/b/1200/750']} />
+```
+
+---
 
 ## Component (paste into `components/MorphingSvgMaskSlider.tsx`)
 
