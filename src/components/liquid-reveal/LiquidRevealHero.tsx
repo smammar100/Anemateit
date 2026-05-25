@@ -15,6 +15,8 @@ type Props = {
   lastName?: string;
   backdrop?: string;
   blobSize?: number;
+  /** CSS scale applied to the reveal image. Default 1. */
+  revealScale?: number;
 };
 
 export default function LiquidRevealHero({
@@ -24,6 +26,7 @@ export default function LiquidRevealHero({
   lastName = 'NORRIS',
   backdrop = '04',
   blobSize = 140,
+  revealScale = 1,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [hovering, setHovering] = useState(false);
@@ -152,7 +155,12 @@ export default function LiquidRevealHero({
         src={revealSrc}
         alt=""
         className="absolute inset-0 w-full h-full object-contain object-bottom select-none pointer-events-none z-10"
-        style={{ mask: `url(#${maskId})`, WebkitMask: `url(#${maskId})` }}
+        style={{
+          mask: `url(#${maskId})`,
+          WebkitMask: `url(#${maskId})`,
+          transform: `scale(${revealScale})`,
+          transformOrigin: 'center bottom',
+        }}
       />
 
       <motion.h1

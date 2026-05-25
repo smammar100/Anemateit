@@ -30,6 +30,7 @@ const LIVE_DEMOS: Record<string, () => ReactNode> = {
       <LiquidRevealHero
         portraitSrc="/images/projects/lando/portrait.webp"
         revealSrc="/images/projects/lando/helmet.webp"
+        revealScale={0.25}
       />
     </div>
   ),
