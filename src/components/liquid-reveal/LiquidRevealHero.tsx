@@ -22,7 +22,7 @@ type Props = {
   backdrop?: string;
   /** Backwards-compat shim for the old SVG-goo version. Not used here. */
   blobSize?: number;
-  /** Backwards-compat shim. Not used here. */
+  /** Scale of the helmet (reveal) plane relative to the portrait. Default 1. */
   revealScale?: number;
 };
 
@@ -32,6 +32,7 @@ export default function LiquidRevealHero({
   firstName = 'LANDO',
   lastName = 'NORRIS',
   backdrop = '04',
+  revealScale = 1,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -275,6 +276,7 @@ export default function LiquidRevealHero({
       plane2Material.uniforms.uTexture.value = tex;
       plane2Material.needsUpdate = true;
       fitCover(plane2, tex);
+      plane2.scale.multiplyScalar(revealScale);
     });
 
     sizeToContainer();
@@ -283,8 +285,10 @@ export default function LiquidRevealHero({
     const ro = new ResizeObserver(() => {
       sizeToContainer();
       if (plane1Material.map) fitCover(plane1, plane1Material.map);
-      if (plane2Material.uniforms.uTexture.value)
+      if (plane2Material.uniforms.uTexture.value) {
         fitCover(plane2, plane2Material.uniforms.uTexture.value);
+        plane2.scale.multiplyScalar(revealScale);
+      }
     });
     ro.observe(wrap);
 
@@ -356,7 +360,7 @@ export default function LiquidRevealHero({
       plane2.geometry.dispose();
       renderer.dispose();
     };
-  }, [portraitSrc, revealSrc]);
+  }, [portraitSrc, revealSrc, revealScale]);
 
   return (
     <section
