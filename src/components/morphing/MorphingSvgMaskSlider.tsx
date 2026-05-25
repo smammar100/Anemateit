@@ -26,6 +26,8 @@ type Props = {
   duration?: number;
   autoPlay?: boolean;
   interval?: number;
+  /** Hide prev/next nav arrows. Useful when embedded as a thumbnail. */
+  showArrows?: boolean;
 };
 
 export default function MorphingSvgMaskSlider({
@@ -34,6 +36,7 @@ export default function MorphingSvgMaskSlider({
   duration = 0.8,
   autoPlay = false,
   interval = 4000,
+  showArrows = true,
 }: Props) {
   const clipId = useId();
   const [index, setIndex] = useState(0);
@@ -132,22 +135,24 @@ export default function MorphingSvgMaskSlider({
         </svg>
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => goTo(-1)}
-          className="grid place-items-center w-12 h-12 rounded-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-shadow text-gray-800"
-          aria-label="Previous slide"
-        >
-          <Arrow direction="left" />
-        </button>
-        <button
-          onClick={() => goTo(1)}
-          className="grid place-items-center w-12 h-12 rounded-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-shadow text-gray-800"
-          aria-label="Next slide"
-        >
-          <Arrow direction="right" />
-        </button>
-      </div>
+      {showArrows && (
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => goTo(-1)}
+            className="grid place-items-center w-12 h-12 rounded-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-shadow text-gray-800"
+            aria-label="Previous slide"
+          >
+            <Arrow direction="left" />
+          </button>
+          <button
+            onClick={() => goTo(1)}
+            className="grid place-items-center w-12 h-12 rounded-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-shadow text-gray-800"
+            aria-label="Next slide"
+          >
+            <Arrow direction="right" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
