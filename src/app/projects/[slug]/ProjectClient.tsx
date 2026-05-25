@@ -28,8 +28,8 @@ const LIVE_DEMOS: Record<string, () => ReactNode> = {
   'liquid-reveal-hero': () => (
     <div className="aspect-[16/9] w-full">
       <LiquidRevealHero
-        portraitSrc="https://picsum.photos/seed/portrait/1200/1600"
-        revealSrc="https://picsum.photos/seed/helmet/1200/1600"
+        portraitSrc="/images/projects/lando/portrait.webp"
+        revealSrc="/images/projects/lando/helmet.webp"
       />
     </div>
   ),
