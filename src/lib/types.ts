@@ -23,6 +23,14 @@ export interface SanityFileAsset {
 
 export type ThumbnailType = 'video' | 'gif'
 
+export interface Category {
+  _id: string
+  _type: 'category'
+  title: string
+  slug: SanitySlug
+  order?: number
+}
+
 export interface Project {
   _id: string
   _type: 'project'
@@ -32,6 +40,7 @@ export interface Project {
   thumbnailType: ThumbnailType
   thumbnailVideo?: SanityFileAsset
   thumbnailGif?: SanityImageAsset
+  category?: Category
   technologies?: string[]
   copyPrompt: string
   viewCodeUrl?: string

@@ -1,10 +1,20 @@
 import Link from 'next/link';
 import Text from '@/components/fundations/elements/Text';
 import { urlFor, fileUrl } from '@/lib/sanity';
+import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import type { Project } from '@/lib/types';
+
+const CARD_IMAGES = [
+  'https://picsum.photos/seed/morph1/1200/750',
+  'https://picsum.photos/seed/morph2/1200/750',
+  'https://picsum.photos/seed/morph3/1200/750',
+  'https://picsum.photos/seed/morph4/1200/750',
+  'https://picsum.photos/seed/morph5/1200/750',
+];
 
 export default function ProjectCard({ project }: { project: Project }) {
   const url = `/projects/${project.slug.current}`;
+  const isMorphingSlider = project.slug.current === 'morphing-svg-mask-slider';
 
   const videoSrc =
     project.thumbnailType === 'video' && project.thumbnailVideo?.asset?._ref
@@ -19,7 +29,16 @@ export default function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="group-hover:opacity-30 hover:opacity-100 peer hover:peer-hover:opacity-30 duration-300 group">
       <div className="relative p-8 bg-base-50 rounded-lg overflow-hidden">
-        {videoSrc && (
+        {isMorphingSlider ? (
+          <div className="aspect-[8/5] w-full rounded shadow bg-base-100 overflow-hidden">
+            <MorphingSvgMaskSlider
+              images={CARD_IMAGES}
+              autoPlay
+              interval={3000}
+              showArrows={false}
+            />
+          </div>
+        ) : videoSrc ? (
           <video
             src={videoSrc}
             className="object-cover aspect-[8/5] w-full object-top rounded shadow bg-base-100"
@@ -30,8 +49,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             preload="metadata"
             disablePictureInPicture
           />
-        )}
-        {gifSrc && (
+        ) : gifSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={gifSrc}
@@ -39,8 +57,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             className="object-cover aspect-[8/5] w-full object-top rounded shadow bg-base-100"
             loading="lazy"
           />
-        )}
-        {!videoSrc && !gifSrc && (
+        ) : (
           <div className="aspect-[8/5] w-full rounded shadow bg-base-100 flex items-center justify-center">
             <Text tag="span" variant="textXS" className="text-base-400">
               No preview

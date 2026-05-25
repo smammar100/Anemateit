@@ -1,32 +1,32 @@
 import Button from '@/components/fundations/elements/Button';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import ProjectCard from '@/components/projects/ProjectCard';
-import { getAllProjects } from '@/lib/queries';
+import { getAllProjects, getAllCategories } from '@/lib/queries';
 import SitesPreviewClient from './SitesPreviewClient';
 
 export default async function SitesPreview() {
-  const projects = await getAllProjects();
-  const allTechs = [...new Set(projects.flatMap((p) => p.technologies || []))];
-  const sortedTechs = allTechs.sort((a, b) => a.localeCompare(b));
+  const [projects, categories] = await Promise.all([
+    getAllProjects(),
+    getAllCategories(),
+  ]);
   const initialVisible = 7;
 
   return (
     <section>
       <Wrapper variant="standard" className="py-24">
-        {sortedTechs.length > 0 && (
+        {categories.length > 0 && (
           <div className="relative flex snap-x snap-proximity gap-1 py-2 overflow-x-scroll scrollbar-hide">
-            {sortedTechs.map((tech) => (
+            {categories.map((cat) => (
               <Button
-                key={tech}
+                key={cat._id}
                 isLink
                 size="xs"
                 variant="muted"
-                title={tech}
-                aria-label={tech}
-                href={`/?tech=${encodeURIComponent(tech)}`}
-                className="capitalize"
+                title={cat.title}
+                aria-label={cat.title}
+                href={`/?category=${encodeURIComponent(cat.slug.current)}`}
               >
-                {tech}
+                {cat.title}
               </Button>
             ))}
           </div>

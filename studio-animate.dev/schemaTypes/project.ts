@@ -54,6 +54,13 @@ export const project = defineType({
       hidden: ({document}) => document?.thumbnailType !== 'gif',
     }),
     defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'reference',
+      to: [{type: 'category'}],
+      description: 'e.g. Motion Animations, Text Animations, Buttons',
+    }),
+    defineField({
       name: 'technologies',
       title: 'Technologies Used',
       type: 'array',

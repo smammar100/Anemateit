@@ -70,7 +70,8 @@ export default function LiquidRevealHero({
     const fitContain = (plane: THREE.Mesh, tex: THREE.Texture) => {
       if (!tex.image) return;
       const { width, height } = wrap.getBoundingClientRect();
-      const imgAspect = tex.image.width / tex.image.height;
+      const img = tex.image as { width: number; height: number };
+      const imgAspect = img.width / img.height;
       const winAspect = width / height;
       if (imgAspect >= winAspect) {
         // image relatively wider → fit the width, letterbox top/bottom
