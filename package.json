@@ -4,31 +4,40 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
+    "dev": "concurrently -k -n velite,next -c blue,green \"velite dev\" \"next dev\"",
+    "build": "velite build && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "velite": "velite",
     "studio:dev": "npm --prefix studio-animate.dev run dev",
     "studio:build": "npm --prefix studio-animate.dev run build",
     "studio:deploy": "npm --prefix studio-animate.dev run deploy"
   },
-  "overrides": {
-    "vite": "^7"
-  },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.6",
-    "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.2",
-    "@lexingtonthemes/seo": "^0.2.0",
-    "@sanity/astro": "^3.4.0",
     "@sanity/client": "^7.22.0",
     "@sanity/image-url": "^2.1.1",
     "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.3.0",
-    "astro": "^6.3.5",
+    "flubber": "^0.4.2",
+    "framer-motion": "^11.18.0",
+    "fuse.js": "^7.0.0",
+    "gray-matter": "^4.0.3",
+    "next": "^15.0.0",
+    "next-sanity": "^9.8.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rss": "^1.2.2",
     "tailwind-scrollbar-hide": "^4.0.0",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.0",
+    "velite": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/rss": "^0.0.32",
+    "concurrently": "^9.2.1",
+    "typescript": "^5.7.0"
   }
 }

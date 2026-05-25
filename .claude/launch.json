@@ -2,17 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "Astro Dev Server",
+      "name": "Next.js Dev Server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 4321,
-      "autoPort": true
-    },
-    {
-      "name": "Astro Preview Server",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "preview"],
-      "port": 4321,
+      "port": 3000,
       "autoPort": true
     },
     {

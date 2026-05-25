@@ -1,5 +1,7 @@
 # Build output
-dist/
+.next/
+out/
+.velite/
 
 # Dependencies
 node_modules/
@@ -33,3 +35,10 @@ pnpm-debug.log*
 *.swp
 *.tmp
 Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Test scaffolds
+EAnimatecarbon_q2_2026_test-slider/
