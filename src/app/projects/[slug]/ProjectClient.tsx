@@ -269,14 +269,14 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
               )}
 
               <div className="flex flex-col min-h-0 lg:flex-1">
-                <Text
-                  tag="h3"
-                  variant="textSM"
-                  className="text-base-900 font-semibold mb-2"
-                >
-                  How to use
-                </Text>
-                <div className="flex flex-wrap gap-1.5 mb-3">
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <Text
+                    tag="h3"
+                    variant="textSM"
+                    className="text-base-900 font-semibold"
+                  >
+                    How to use
+                  </Text>
                   <button
                     type="button"
                     onClick={copyPrompt}
