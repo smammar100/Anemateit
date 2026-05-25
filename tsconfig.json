@@ -27,5 +27,9 @@
     ".next/types/**/*.ts",
     ".velite"
   ],
-  "exclude": ["node_modules", "EAnimatecarbon_q2_2026_test-slider"]
+  "exclude": [
+    "node_modules",
+    "EAnimatecarbon_q2_2026_test-slider",
+    "studio-animate.dev"
+  ]
 }
