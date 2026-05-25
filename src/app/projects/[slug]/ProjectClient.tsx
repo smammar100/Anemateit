@@ -78,11 +78,8 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
     <>
       <section>
         <Wrapper variant="standard" className="pb-16">
-          <div
-            className="grid gap-10 items-start lg:grid-cols-[1fr_2fr]"
-            style={{ gridTemplateColumns: '1fr' }}
-          >
-            <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-10 items-stretch">
+            <div className="flex flex-col gap-6 order-2">
               <div>
                 <Text
                   tag="h1"
@@ -187,7 +184,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
               </div>
             </div>
 
-            <div className="rounded-xl overflow-hidden bg-base-50 shadow-sm">
+            <div className="rounded-xl overflow-hidden bg-base-50 shadow-sm order-1 max-w-3xl mx-auto w-full">
               {LIVE_DEMO_IMAGES[project.slug.current] ? (
                 <div className="bg-white p-8">
                   <MorphingSvgMaskSlider
