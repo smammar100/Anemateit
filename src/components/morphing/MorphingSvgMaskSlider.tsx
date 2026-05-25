@@ -33,7 +33,7 @@ type Props = {
 export default function MorphingSvgMaskSlider({
   images,
   shapes = SHAPES,
-  duration = 0.8,
+  duration = 0.65,
   autoPlay = false,
   interval = 4000,
   showArrows = true,
@@ -68,41 +68,37 @@ export default function MorphingSvgMaskSlider({
     if (prevIndex.current === index) return;
     const fromShape = shapes[prevIndex.current % shapes.length];
     const toShape = shapes[index % shapes.length];
-    const interpolator = interpolate(fromShape, toShape, { maxSegmentLength: 4 });
+    const interpolator = interpolate(fromShape, toShape, { maxSegmentLength: 8 });
 
     const controls = animate(0, 1, {
       duration,
-      ease: [0.4, 0, 0.2, 1],
+      ease: [0.65, 0, 0.35, 1],
       onUpdate: (latest) => pathString.set(interpolator(latest)),
     });
 
     return () => controls.stop();
   }, [index, shapes, duration, pathString]);
 
-  // Scale breathing — shrink then spring back on each slide change
+  // Scale breathing — a single smooth dip-and-recover driven by framer-motion
+  // for buttery-smooth synchronization with the path morph.
   const mounted = useRef(false);
+  const scale = useMotionValue(1);
   useEffect(() => {
     if (!mounted.current) {
       mounted.current = true;
       return;
     }
-    const el = wrapRef.current;
-    if (!el) return;
-
-    el.style.transition = `transform ${duration * 0.35}s cubic-bezier(0.4, 0, 1, 1)`;
-    el.style.transform = 'scale(0.93)';
-
-    const timer = setTimeout(() => {
-      el.style.transition = `transform ${duration * 0.5}s cubic-bezier(0.16, 1, 0.3, 1)`;
-      el.style.transform = 'scale(1)';
-    }, duration * 350);
-
-    return () => clearTimeout(timer);
-  }, [index, duration]);
+    const controls = animate(scale, [1, 0.96, 1], {
+      duration,
+      ease: [0.4, 0, 0.2, 1],
+      times: [0, 0.45, 1],
+    });
+    return () => controls.stop();
+  }, [index, duration, scale]);
 
   return (
     <div className="flex flex-col items-center gap-6 select-none">
-      <div ref={wrapRef} className="w-full">
+      <motion.div ref={wrapRef} className="w-full" style={{ scale }}>
         <svg
           viewBox="0 0 1000 625"
           className="w-full"
@@ -133,7 +129,7 @@ export default function MorphingSvgMaskSlider({
             </AnimatePresence>
           </g>
         </svg>
-      </div>
+      </motion.div>
 
       {showArrows && (
         <div className="flex items-center gap-3">

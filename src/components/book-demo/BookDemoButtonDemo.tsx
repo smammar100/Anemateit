@@ -15,22 +15,43 @@ const variants: { name: BookDemoVariant; color: string }[] = [
   { name: "magenta", color: "#e060c5" },
 ];
 
-export default function BookDemoButtonDemo() {
+type Props = {
+  compact?: boolean;
+};
+
+export default function BookDemoButtonDemo({ compact = false }: Props) {
   const [variant, setVariant] = useState<BookDemoVariant>("lime");
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-14 py-12 px-6">
-      <div className="flex h-[88px] w-[288px] items-center justify-center">
-        <div className="origin-center scale-[2]">
+    <div
+      className={cn(
+        "flex h-full w-full flex-col items-center justify-center",
+        compact ? "gap-4 py-4 px-3" : "gap-14 py-12 px-6"
+      )}
+    >
+      <div
+        className={cn(
+          "flex items-center justify-center",
+          compact ? "h-11 w-36" : "h-[88px] w-[288px]"
+        )}
+      >
+        <div className={compact ? "" : "origin-center scale-[2]"}>
           <BookDemoButton variant={variant} />
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-3">
-        <span className="text-[10px] uppercase tracking-[0.18em] text-base-400 font-medium">
-          Color
-        </span>
-        <div className="flex items-center gap-2.5 rounded-full border border-base-100 bg-white/60 backdrop-blur px-3 py-2 shadow-sm">
+      <div className={cn("flex flex-col items-center", compact ? "gap-1.5" : "gap-3")}>
+        {!compact && (
+          <span className="text-[10px] uppercase tracking-[0.18em] text-base-400 font-medium">
+            Color
+          </span>
+        )}
+        <div
+          className={cn(
+            "flex items-center rounded-full border border-base-100 bg-white/60 backdrop-blur shadow-sm",
+            compact ? "gap-1.5 px-2 py-1.5" : "gap-2.5 px-3 py-2"
+          )}
+        >
           {variants.map((v) => (
             <button
               key={v.name}
@@ -39,7 +60,8 @@ export default function BookDemoButtonDemo() {
               aria-label={`Switch to ${v.name} color`}
               aria-pressed={variant === v.name}
               className={cn(
-                "size-6 rounded-full outline-none ring-offset-2 ring-offset-white transition-all duration-200 cursor-pointer",
+                "rounded-full outline-none ring-offset-2 ring-offset-white transition-all duration-200 cursor-pointer",
+                compact ? "size-3.5" : "size-6",
                 variant === v.name
                   ? "ring-2 ring-base-900 scale-110"
                   : "ring-1 ring-base-200/80 hover:scale-110 hover:ring-base-400"
@@ -48,9 +70,11 @@ export default function BookDemoButtonDemo() {
             />
           ))}
         </div>
-        <span className="text-xs text-base-500 capitalize font-medium tracking-tight">
-          {variant}
-        </span>
+        {!compact && (
+          <span className="text-xs text-base-500 capitalize font-medium tracking-tight">
+            {variant}
+          </span>
+        )}
       </div>
     </div>
   );

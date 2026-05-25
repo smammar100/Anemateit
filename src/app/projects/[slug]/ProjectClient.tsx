@@ -14,15 +14,17 @@ import type { Project } from '@/lib/types';
 
 const LIVE_DEMOS: Record<string, () => ReactNode> = {
   'morphing-svg-mask-slider': () => (
-    <MorphingSvgMaskSlider
-      images={[
-        'https://picsum.photos/seed/morph1/1200/750',
-        'https://picsum.photos/seed/morph2/1200/750',
-        'https://picsum.photos/seed/morph3/1200/750',
-        'https://picsum.photos/seed/morph4/1200/750',
-        'https://picsum.photos/seed/morph5/1200/750',
-      ]}
-    />
+    <div className="w-full max-w-4xl mx-auto">
+      <MorphingSvgMaskSlider
+        images={[
+          'https://picsum.photos/seed/morph1/1200/750',
+          'https://picsum.photos/seed/morph2/1200/750',
+          'https://picsum.photos/seed/morph3/1200/750',
+          'https://picsum.photos/seed/morph4/1200/750',
+          'https://picsum.photos/seed/morph5/1200/750',
+        ]}
+      />
+    </div>
   ),
   'liquid-reveal-hero': () => (
     <div className="aspect-[16/9] w-full">

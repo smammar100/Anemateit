@@ -42,7 +42,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           </div>
         ) : isBookDemo ? (
           <div className="aspect-[8/5] w-full rounded shadow bg-base-100 overflow-hidden">
-            <BookDemoButtonDemo />
+            <BookDemoButtonDemo compact />
           </div>
         ) : videoSrc ? (
           <video

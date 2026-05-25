@@ -3,9 +3,19 @@ import { notFound } from 'next/navigation';
 import SiteShell from '@/components/global/SiteShell';
 import Text from '@/components/fundations/elements/Text';
 import Wrapper from '@/components/fundations/containers/Wrapper';
+import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
+import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import { getAllProjects, getProjectBySlug, getAllProjectSlugs } from '@/lib/queries';
 import { urlFor, fileUrl } from '@/lib/sanity';
 import ProjectClient from './ProjectClient';
+
+const CARD_IMAGES = [
+  'https://picsum.photos/seed/morph1/1200/750',
+  'https://picsum.photos/seed/morph2/1200/750',
+  'https://picsum.photos/seed/morph3/1200/750',
+  'https://picsum.photos/seed/morph4/1200/750',
+  'https://picsum.photos/seed/morph5/1200/750',
+];
 
 export async function generateStaticParams() {
   const slugs = await getAllProjectSlugs();
@@ -52,6 +62,8 @@ export default async function ProjectPage({
             </Text>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
               {relatedProjects.map((p) => {
+                const isMorphingSlider = p.slug.current === 'morphing-svg-mask-slider';
+                const isBookDemo = p.slug.current === 'book-demo-button';
                 const rVideo =
                   p.thumbnailType === 'video' && p.thumbnailVideo?.asset?._ref
                     ? fileUrl(p.thumbnailVideo.asset._ref)
@@ -68,7 +80,26 @@ export default async function ProjectPage({
                     title={p.title}
                   >
                     <div className="relative p-4 bg-base-50 rounded-lg overflow-hidden">
-                      {rVideo ? (
+                      {isMorphingSlider ? (
+                        <div
+                          className="w-full rounded bg-base-100 overflow-hidden"
+                          style={{ aspectRatio: '16 / 9' }}
+                        >
+                          <MorphingSvgMaskSlider
+                            images={CARD_IMAGES}
+                            autoPlay
+                            interval={3000}
+                            showArrows={false}
+                          />
+                        </div>
+                      ) : isBookDemo ? (
+                        <div
+                          className="w-full rounded bg-base-100 overflow-hidden"
+                          style={{ aspectRatio: '16 / 9' }}
+                        >
+                          <BookDemoButtonDemo compact />
+                        </div>
+                      ) : rVideo ? (
                         <video
                           src={rVideo}
                           className="w-full rounded bg-base-100"
