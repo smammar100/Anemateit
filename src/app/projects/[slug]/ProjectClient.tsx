@@ -1,22 +1,39 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import Text from '@/components/fundations/elements/Text';
 import Button from '@/components/fundations/elements/Button';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import { ArrowUpRight } from '@/components/fundations/icons/Icons';
 import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
+import LiquidRevealHero from '@/components/liquid-reveal/LiquidRevealHero';
+import PerspectiveHighlightDemo from '@/components/perspective/PerspectiveHighlight';
 import type { Project } from '@/lib/types';
 
-// Live demos keyed by slug. Project slugs in this map render the actual
-// React component instead of the recorded reference video/GIF.
-const LIVE_DEMO_IMAGES: Record<string, string[]> = {
-  'morphing-svg-mask-slider': [
-    'https://picsum.photos/seed/morph1/1200/750',
-    'https://picsum.photos/seed/morph2/1200/750',
-    'https://picsum.photos/seed/morph3/1200/750',
-    'https://picsum.photos/seed/morph4/1200/750',
-    'https://picsum.photos/seed/morph5/1200/750',
-  ],
+// Live demo renderers keyed by slug. When a slug matches, the project
+// detail page renders the actual React component from the prompt instead
+// of the recorded reference video/GIF.
+const LIVE_DEMOS: Record<string, () => ReactNode> = {
+  'morphing-svg-mask-slider': () => (
+    <MorphingSvgMaskSlider
+      images={[
+        'https://picsum.photos/seed/morph1/1200/750',
+        'https://picsum.photos/seed/morph2/1200/750',
+        'https://picsum.photos/seed/morph3/1200/750',
+        'https://picsum.photos/seed/morph4/1200/750',
+        'https://picsum.photos/seed/morph5/1200/750',
+      ]}
+    />
+  ),
+  'liquid-reveal-hero': () => (
+    <div className="aspect-[16/9] w-full">
+      <LiquidRevealHero
+        portraitSrc="https://picsum.photos/seed/portrait/1200/1600"
+        revealSrc="https://picsum.photos/seed/helmet/1200/1600"
+      />
+    </div>
+  ),
+  '3d-perspective-highlight': () => <PerspectiveHighlightDemo />,
 };
 
 type Props = {
@@ -185,21 +202,19 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
             </div>
 
             <div className="rounded-xl overflow-hidden bg-base-50 shadow-sm order-1 w-full">
-              {LIVE_DEMO_IMAGES[project.slug.current] ? (
-                <div className="bg-white p-8">
-                  <MorphingSvgMaskSlider
-                    images={LIVE_DEMO_IMAGES[project.slug.current]}
-                  />
+              {LIVE_DEMOS[project.slug.current] ? (
+                <div className="bg-white">
+                  {LIVE_DEMOS[project.slug.current]()}
                   <Text
                     tag="p"
                     variant="textXS"
-                    className="text-base-500 mt-4 text-center"
+                    className="text-base-500 py-4 text-center"
                   >
-                    Live demo — click the arrows to morph between mask shapes.
+                    Live demo — interact with it.
                   </Text>
                 </div>
               ) : null}
-              {!LIVE_DEMO_IMAGES[project.slug.current] && videoSrc && (
+              {!LIVE_DEMOS[project.slug.current] && videoSrc && (
                 <video
                   src={videoSrc}
                   className="w-full block bg-base-100"
@@ -211,7 +226,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                   disablePictureInPicture
                 />
               )}
-              {!LIVE_DEMO_IMAGES[project.slug.current] && gifSrc && (
+              {!LIVE_DEMOS[project.slug.current] && gifSrc && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={gifSrc}
@@ -220,7 +235,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                   loading="lazy"
                 />
               )}
-              {!LIVE_DEMO_IMAGES[project.slug.current] && !videoSrc && !gifSrc && (
+              {!LIVE_DEMOS[project.slug.current] && !videoSrc && !gifSrc && (
                 <div
                   className="w-full bg-base-100 flex items-center justify-center"
                   style={{ aspectRatio: '16 / 9' }}
