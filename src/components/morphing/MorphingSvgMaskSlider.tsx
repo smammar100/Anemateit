@@ -102,7 +102,7 @@ export default function MorphingSvgMaskSlider({
 
   return (
     <div className="flex flex-col items-center gap-6 select-none">
-      <div ref={wrapRef} className="w-full" style={{ maxWidth: 800 }}>
+      <div ref={wrapRef} className="w-full">
         <svg
           viewBox="0 0 1000 625"
           className="w-full"

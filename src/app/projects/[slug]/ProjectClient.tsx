@@ -184,7 +184,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
               </div>
             </div>
 
-            <div className="rounded-xl overflow-hidden bg-base-50 shadow-sm order-1 max-w-3xl mx-auto w-full">
+            <div className="rounded-xl overflow-hidden bg-base-50 shadow-sm order-1 w-full">
               {LIVE_DEMO_IMAGES[project.slug.current] ? (
                 <div className="bg-white p-8">
                   <MorphingSvgMaskSlider
