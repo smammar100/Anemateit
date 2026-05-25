@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Text from '@/components/fundations/elements/Text';
 import { urlFor, fileUrl } from '@/lib/sanity';
 import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
+import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import type { Project } from '@/lib/types';
 
 const CARD_IMAGES = [
@@ -15,6 +16,7 @@ const CARD_IMAGES = [
 export default function ProjectCard({ project }: { project: Project }) {
   const url = `/projects/${project.slug.current}`;
   const isMorphingSlider = project.slug.current === 'morphing-svg-mask-slider';
+  const isBookDemo = project.slug.current === 'book-demo-button';
 
   const videoSrc =
     project.thumbnailType === 'video' && project.thumbnailVideo?.asset?._ref
@@ -37,6 +39,10 @@ export default function ProjectCard({ project }: { project: Project }) {
               interval={3000}
               showArrows={false}
             />
+          </div>
+        ) : isBookDemo ? (
+          <div className="aspect-[8/5] w-full rounded shadow bg-base-100 overflow-hidden">
+            <BookDemoButtonDemo />
           </div>
         ) : videoSrc ? (
           <video

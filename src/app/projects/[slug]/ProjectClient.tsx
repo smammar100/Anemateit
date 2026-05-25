@@ -8,6 +8,7 @@ import { ArrowUpRight } from '@/components/fundations/icons/Icons';
 import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import LiquidRevealHero from '@/components/liquid-reveal/LiquidRevealHero';
 import PerspectiveHighlightDemo from '@/components/perspective/PerspectiveHighlight';
+import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import type { Project } from '@/lib/types';
 
 // Live demo renderers keyed by slug. When a slug matches, the project
@@ -35,6 +36,7 @@ const LIVE_DEMOS: Record<string, () => ReactNode> = {
     </div>
   ),
   '3d-perspective-highlight': () => <PerspectiveHighlightDemo />,
+  'book-demo-button': () => <BookDemoButtonDemo />,
 };
 
 type Props = {
