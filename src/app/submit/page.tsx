@@ -15,7 +15,7 @@ export default function SubmitPage() {
                 variant="displayMD"
                 className="text-base-900 font-display font-thin"
               >
-                Submit your animation to Animate.dev
+                Submit your animation to Anemate.dev
               </Text>
               <Text tag="p" variant="textBase" className="mt-2 text-base-600 text-balance">
                 Built a motion effect that holds up inside real product UI? Send it our

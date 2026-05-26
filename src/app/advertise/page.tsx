@@ -13,7 +13,7 @@ const packages = [
       { label: 'Social push', value: '1x on X + LinkedIn' },
     ],
     description:
-      'A bespoke write-up on Animate.dev that puts your product in front of builders shipping with AI coding tools. Great for launches that need instant credibility.',
+      'A bespoke write-up on Anemate.dev that puts your product in front of builders shipping with AI coding tools. Great for launches that need instant credibility.',
   },
   {
     name: 'Newsletter Ad',

@@ -17,7 +17,7 @@ export default function AboutPage() {
             </Text>
             <Wrapper variant="prose" className="mt-12">
               <p>
-                Animate.dev is a curated library of web animations built for how people
+                Anemate.dev is a curated library of web animations built for how people
                 actually ship UI in 2026 — inside Claude Code, Cursor, v0, Lovable, and
                 Bolt. Every entry ships with a paste-ready prompt, not a CodePen link.
               </p>
@@ -42,7 +42,7 @@ export default function AboutPage() {
                 variant="textBase"
                 className="text-base-900 mt-2 font-semibold"
               >
-                — The Animate.dev team
+                — The Anemate.dev team
               </Text>
             </div>
           </Wrapper>

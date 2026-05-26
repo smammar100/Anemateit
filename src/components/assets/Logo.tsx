@@ -8,7 +8,7 @@ export default function Logo({ className, ...rest }: SVGProps<SVGSVGElement>) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="Animate"
+      aria-label="Anemate"
       {...rest}
     >
       <text
@@ -19,8 +19,10 @@ export default function Logo({ className, ...rest }: SVGProps<SVGSVGElement>) {
         fontWeight="400"
         letterSpacing="-2"
         fill="currentColor"
+        textLength="360"
+        lengthAdjust="spacingAndGlyphs"
       >
-        Animate
+        Anemate
       </text>
     </svg>
   );

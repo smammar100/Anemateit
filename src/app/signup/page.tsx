@@ -18,7 +18,7 @@ export default function SignUpPage() {
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4">
               Create an account to save prompts, sync across tools, and unlock the full
-              Animate.dev library.
+              Anemate.dev library.
             </Text>
           </div>
           <form className="mt-10 space-y-4">
