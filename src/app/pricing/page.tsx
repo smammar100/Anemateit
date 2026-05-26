@@ -7,24 +7,24 @@ import Faq from '@/components/global/Faq';
 const plans = [
   {
     name: 'Free',
-    description: 'Get limited access to everything.',
+    description: 'Browse the library. Copy prompts for personal projects.',
     priceStatic: '$0',
     features: [
-      { label: 'Bookmarks', value: 'Save up to 5 favorites' },
-      { label: 'Filters', value: 'Basic filters for quick scans' },
-      { label: 'Email', value: 'Weekly inspiration roundup' },
-      { label: 'Support', value: 'Community help' },
+      { label: 'Prompts', value: 'Free animations, no limits' },
+      { label: 'Previews', value: 'Full video + code samples' },
+      { label: 'License', value: 'Personal use only' },
+      { label: 'Support', value: 'Community Discord' },
     ],
   },
   {
-    name: 'Team',
-    description: 'Get limited access to everything.',
+    name: 'Pro',
+    description: 'Every prompt. Commercial use.',
     priceMonthly: '$9',
     features: [
-      { label: 'Bookmarks & collections', value: 'Unlimited for teams' },
-      { label: 'Filters & tags', value: 'Advanced + saved searches' },
-      { label: 'Workspace', value: 'Shared lists for teammates' },
-      { label: 'Exports', value: 'CSV / Notion ready' },
+      { label: 'Prompts', value: 'The full library' },
+      { label: 'License', value: 'Client & commercial work' },
+      { label: 'Updates', value: 'New drops weekly' },
+      { label: 'Downloads', value: 'Ship-ready source files' },
       { label: 'Support', value: 'Priority replies' },
     ],
   },
@@ -45,8 +45,8 @@ export default function PricingPage() {
               <span className="block">Use it like a pro.</span>
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-              Choose a plan to unlock deeper filtering, unlimited saves, and tools built for
-              designers who study real production websites—not theory.
+              One paste, every animation. Unlock the full prompt library and ship motion
+              that lands in Claude Code, Cursor, v0, Lovable, and Bolt.
             </Text>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-12">

@@ -17,8 +17,8 @@ export default function SignUpPage() {
               Sign up
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-              Create your account below. We promise not to make you confirm your email three
-              times (unless you really want to).
+              Create an account to save prompts, sync across tools, and unlock the full
+              Animate.dev library.
             </Text>
           </div>
           <form className="mt-10 space-y-4">

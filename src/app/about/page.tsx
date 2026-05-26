@@ -17,33 +17,32 @@ export default function AboutPage() {
             </Text>
             <Wrapper variant="prose" className="mt-12">
               <p>
-                Carbon is a community-driven platform for designers, developers, and creative
-                professionals who take their craft seriously. It&apos;s a place to stay current
-                — from design systems and typography to modern front-end tools and workflows.
+                Animate.dev is a curated library of web animations built for how people
+                actually ship UI in 2026 — inside Claude Code, Cursor, v0, Lovable, and
+                Bolt. Every entry ships with a paste-ready prompt, not a CodePen link.
               </p>
               <p>
-                Beyond resources, Carbon functions as a living creative index. Members share
-                work, exchange ideas, and learn from real-world experience. Curated
-                collections, focused articles, tutorials, and trend breakdowns are built to
-                improve decision-making, not just inspire it.
+                Most animation showcases assume you write your own React. That falls apart
+                the moment you live in a low-code AI tool, where copying a snippet and
+                praying ends in half-broken output. So we treat the prompt as the
+                deliverable: one file, named props, a short mental model, clear tweak
+                knobs.
               </p>
               <p>
-                Good work doesn&apos;t happen in isolation. Carbon is designed to connect
-                forward-thinking creatives, encourage critical thinking, and push standards
-                higher. Join the community and use it to sharpen your skills, expand your
-                perspective, and build better work.
+                We skew toward motion that holds up in real product UI — not demo reels.
+                Ship something good with it, that&apos;s the whole point.
               </p>
             </Wrapper>
             <div className="mt-12">
               <Text className="text-base-600 italic">
-                &quot;Innovation is born from connection. Together, we create the future of design.&quot;
+                &quot;The video shows the result. The prompt makes it yours.&quot;
               </Text>
               <Text
                 tag="p"
                 variant="textBase"
                 className="text-base-900 mt-2 font-semibold"
               >
-                — Jordan Miller, Founder of Carbon
+                — The Animate.dev team
               </Text>
             </div>
           </Wrapper>

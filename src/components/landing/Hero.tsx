@@ -15,9 +15,9 @@ export default function Hero() {
             <span className="block">Copy the prompt.</span>
           </Text>
           <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-            A curated library of premium web animations. Each one ships with an AI
-            prompt you can paste into Claude Code, Cursor, v0, or Lovable to
-            regenerate it in your own stack.
+            A curated library of web animations. Each one ships with a prompt —
+            paste it into Claude Code, Cursor, v0, or Lovable and the effect
+            lands in your stack.
           </Text>
         </div>
       </Wrapper>

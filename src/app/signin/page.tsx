@@ -17,8 +17,8 @@ export default function SignInPage() {
               Sign in
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-              Welcome back. Enter your email and password like you haven&apos;t forgotten them
-              for the 12th time this week.
+              Welcome back. Sign in to access your saved prompts and the full Animate.dev
+              library.
             </Text>
           </div>
           <form className="mt-10 space-y-4">
