@@ -5,7 +5,7 @@ import Wrapper from '@/components/fundations/containers/Wrapper';
 
 const packages = [
   {
-    name: 'Website Feature',
+    name: 'Homepage Feature',
     price: '$999',
     features: [
       { label: 'Homepage placement', value: '7 days live' },
@@ -13,7 +13,7 @@ const packages = [
       { label: 'Social push', value: '1x on X + LinkedIn' },
     ],
     description:
-      'A bespoke write-up on Carbon that shows your product in context. Great for launches that need instant credibility.',
+      'A bespoke write-up on Animate.dev that puts your product in front of builders shipping with AI coding tools. Great for launches that need instant credibility.',
   },
   {
     name: 'Newsletter Ad',
@@ -24,7 +24,7 @@ const packages = [
       { label: 'Creative', value: 'We help refine your copy' },
     ],
     description:
-      'Secure ad space in our weekly newsletter. Reach a curated audience of designers and builders looking for production tools.',
+      'Secure ad space in our weekly newsletter. Reach a curated audience of developers and designers building real product UI with Claude Code, Cursor, v0, Lovable, and Bolt.',
   },
 ];
 
@@ -39,11 +39,11 @@ export default function AdvertisePage() {
               variant="displayLG"
               className="text-base-900 font-display font-thin text-center"
             >
-              Put your launch in front of the Carbon crowd
+              Put your launch in front of AI-native builders
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-              Reach designers and developers actively looking for production-grade
-              inspiration. Choose a package or build a custom campaign.
+              Reach developers and designers shipping real product UI with Claude Code,
+              Cursor, v0, Lovable, and Bolt. Pick a package or build a custom campaign.
             </Text>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-12">

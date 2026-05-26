@@ -21,8 +21,8 @@ export default function NotFound() {
                 Error 404
               </Text>
               <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-                Sorry, the page you are looking for does not exist. It might have been
-                removed, renamed, or is temporarily unavailable.
+                This animation must have unmounted. The page you&apos;re looking for has
+                moved, been renamed, or never existed in the first place.
               </Text>
             </div>
             <Button isLink size="base" variant="default" href="/" className="mt-12 w-fit mx-auto">

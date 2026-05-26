@@ -16,7 +16,7 @@ export default function Footer() {
               variant="displayLG"
               className="text-base-900 font-display font-light mt-12"
             >
-              Stay connected to the future of Carbon
+              Stay connected to the future of animation
             </Text>
           </div>
           <form className="flex flex-col gap-2 max-w-md mx-auto items-start sm:items-center mt-8">
@@ -38,13 +38,13 @@ export default function Footer() {
           </form>
           <div className="flex flex-wrap gap-4 mt-12 justify-center">
             <a href="#_" className="text-base-600 hover:text-accent-600">
-              Twitter
+              GitHub
             </a>
             <a href="#_" className="text-base-600 hover:text-accent-600">
-              Pinterest
+              X
             </a>
             <a href="#_" className="text-base-600 hover:text-accent-600">
-              Instagram
+              YouTube
             </a>
           </div>
         </div>

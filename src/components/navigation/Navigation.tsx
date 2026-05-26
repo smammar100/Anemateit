@@ -1,19 +1,8 @@
 import Link from 'next/link';
 import Logo from '@/components/assets/Logo';
-import Button from '@/components/fundations/elements/Button';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import MobileNav from './MobileNav';
-
-const links = [
-  { href: '/system/overview', text: 'Overview' },
-  { href: '/', text: 'Websites' },
-  { href: '/pricing/', text: 'Pricing' },
-  { href: '/blog/', text: 'Blog' },
-  { href: '/store/', text: 'Store' },
-  { href: '/submit/', text: 'Submit' },
-  { href: '/advertise/', text: 'Sponsors' },
-  { href: 'https://lexingtonthemes.com/templates/carbon', text: 'Buy Carbon' },
-];
+import { navLinks } from '@/lib/navigation';
 
 export default function Navigation() {
   return (
@@ -27,7 +16,7 @@ export default function Navigation() {
             </Link>
             <div className="flex items-center gap-2 lg:gap-2 ml-auto">
               <div className="flex items-center gap-4">
-                {links.map((link) => (
+                {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     className="text-base-600 hover:text-base-900 text-xs whitespace-nowrap"
@@ -37,12 +26,6 @@ export default function Navigation() {
                   </Link>
                 ))}
               </div>
-              <Button isLink size="xs" variant="muted" href="/signin" className="shrink-0">
-                Sign in
-              </Button>
-              <Button isLink size="xs" variant="default" href="/signup" className="shrink-0">
-                Sign up
-              </Button>
             </div>
           </div>
         </Wrapper>

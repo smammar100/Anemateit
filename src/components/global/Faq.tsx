@@ -4,54 +4,54 @@ import { Plus } from '@/components/fundations/icons/Icons';
 
 const faqs = [
   {
-    question: 'What is a website tool curation platform?',
+    question: 'What exactly do I get when I "copy the prompt"?',
     answer:
-      'A website tool curation platform is a site that collects and organizes the best tools available online to help users find resources for their specific needs, such as productivity, design, development, or marketing.',
+      "A self-contained prompt: the animation, its props, the AI's mental model, and the tweak knobs. Paste it into your tool — the effect lands in your stack.",
   },
   {
-    question: 'How are the tools selected for curation?',
+    question: 'Which AI coding tools is Animate.dev built for?',
     answer:
-      'The tools are carefully selected based on their features, user reviews, popularity, and overall utility. Our team evaluates each tool to ensure it meets quality standards and provides value.',
+      'First-class: Claude Code, Cursor, v0, Lovable, Bolt. The prompts are tool-agnostic, so anything that can read structure and emit React should work.',
   },
   {
-    question: 'Can I suggest a tool to be added to the curation?',
+    question: 'Do I need to know React to use these animations?',
     answer:
-      "Yes, we encourage user suggestions! You can recommend tools through our 'Suggest a Tool' form. Each submission is reviewed to ensure it aligns with our platform's focus and quality criteria.",
+      'No. The AI handles the React. If you do write your own, the output stays clean — named props, single file, no surprise dependencies.',
   },
   {
-    question: 'Are the tools on your website free to use?',
+    question: 'Can I use the animations in commercial or client work?',
     answer:
-      'Our curated tools include a mix of free, freemium, and paid options. Each tool listing clearly mentions its pricing model to help you decide which fits your needs.',
+      'Free is personal use only. Pro covers commercial and client work — SaaS, agency projects, paid templates. Details on each animation page.',
   },
   {
-    question: 'How do I know if a tool is trustworthy?',
+    question: 'Why prompts instead of a copy-paste code snippet?',
     answer:
-      'We provide detailed descriptions, reviews, and ratings for each tool. Additionally, tools are vetted for reliability, security, and user feedback before being listed on our platform.',
+      'Snippets break the moment your stack differs from the demo. A prompt encodes intent — the AI fits the effect to your conventions, your styling system, your file structure.',
   },
   {
-    question: 'Do you provide tutorials or guides for the tools?',
+    question: 'How often are new animations added?',
     answer:
-      'Yes, for many tools, we offer links to official documentation, video tutorials, and user guides to help you get started quickly and efficiently.',
+      'New entries land every week. Pro gets them on ship day; free sees a rotating selection.',
   },
   {
-    question: 'Can I leave reviews or feedback on the tools listed?',
+    question: 'What if the AI tool gets it wrong on the first try?',
     answer:
-      'Absolutely! We encourage users to leave reviews and feedback on tool pages. This helps others make informed decisions and ensures we maintain a high-quality curation.',
+      'Every prompt ships with troubleshooting notes — common failure modes and how to nudge the model. The source video is the ground truth.',
   },
   {
-    question: 'Are there categories to help me find tools more easily?',
+    question: 'Can I tweak the animation after it lands in my code?',
     answer:
-      'Yes, tools are categorized by purpose, such as design, development, marketing, or productivity. You can also use our search function to find specific tools quickly.',
+      "Yes. Each prompt calls out the safe tweak knobs — duration, easing, distance, stagger — and what's structural.",
   },
   {
-    question: 'Is there a cost to access the curated tools on your website?',
+    question: 'Do you accept submissions?',
     answer:
-      'Accessing our curated tool lists is completely free. However, individual tools may have their own pricing models, which are indicated in their descriptions.',
+      'Yes. The submit page covers what we look for. We pick motion that holds up in real product UI, not demo reels.',
   },
   {
-    question: 'Can I share curated tools with others?',
+    question: 'Can I share a prompt with my team?',
     answer:
-      'Yes, each tool page has sharing options that allow you to easily send links to your colleagues, friends, or team members.',
+      "On Pro, yes — your seat covers your team for client and commercial work. Sharing free prompts publicly isn't allowed; linking to the animation page always is.",
   },
 ];
 
@@ -68,7 +68,7 @@ export default function Faq() {
             Frequently Asked Questions
           </Text>
           <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-            Everything you need to know about our platform.
+            Everything you need to know about Animate.dev.
           </Text>
         </div>
         <Wrapper variant="narrow" className="mt-12">
