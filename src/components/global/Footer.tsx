@@ -1,8 +1,8 @@
-import Logo from '@/components/assets/Logo';
 import Symbol from '@/components/assets/Symbol';
 import Text from '@/components/fundations/elements/Text';
 import Button from '@/components/fundations/elements/Button';
 import Wrapper from '@/components/fundations/containers/Wrapper';
+import FooterWordmark from './FooterWordmark';
 
 export default function Footer() {
   return (
@@ -49,7 +49,7 @@ export default function Footer() {
           </div>
         </div>
       </Wrapper>
-      <Logo className="text-base-100 mt-8 -mb-24 w-full" />
+      <FooterWordmark />
     </footer>
   );
 }
