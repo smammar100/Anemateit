@@ -9,7 +9,7 @@ const faqs = [
       "A self-contained prompt: the animation, its props, the AI's mental model, and the tweak knobs. Paste it into your tool — the effect lands in your stack.",
   },
   {
-    question: 'Which AI coding tools is Animate.dev built for?',
+    question: 'Which AI coding tools is Anemate.dev built for?',
     answer:
       'First-class: Claude Code, Cursor, v0, Lovable, Bolt. The prompts are tool-agnostic, so anything that can read structure and emit React should work.',
   },
@@ -68,7 +68,7 @@ export default function Faq() {
             Frequently Asked Questions
           </Text>
           <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-            Everything you need to know about Animate.dev.
+            Everything you need to know about Anemate.dev.
           </Text>
         </div>
         <Wrapper variant="narrow" className="mt-12">

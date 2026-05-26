@@ -16,7 +16,7 @@ export default function HowItWorksPage() {
               How it works
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4 text-balance">
-              Most animation showcases hand you a CodePen link and wish you luck. Animate.dev
+              Most animation showcases hand you a CodePen link and wish you luck. Anemate.dev
               treats the prompt as the deliverable — so the effect lands cleanly inside the
               tool you already use.
             </Text>

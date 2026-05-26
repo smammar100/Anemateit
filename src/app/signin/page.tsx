@@ -17,7 +17,7 @@ export default function SignInPage() {
               Sign in
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4">
-              Welcome back. Sign in to access your saved prompts and the full Animate.dev
+              Welcome back. Sign in to access your saved prompts and the full Anemate.dev
               library.
             </Text>
           </div>

@@ -49,7 +49,7 @@ export default function Footer() {
           </div>
         </div>
       </Wrapper>
-      <Logo className="text-base-100 mt-8 -mx-24 -mb-24" />
+      <Logo className="text-base-100 mt-8 -mb-24 w-full" />
     </footer>
   );
 }
