@@ -40,7 +40,7 @@ export default async function PhantomLabGridThumbnail() {
           return (
             <video
               key={project._id}
-              src={fileUrl(project.thumbnailVideo.asset._ref)}
+              src={fileUrl(project.thumbnailVideo.asset._ref) ?? undefined}
               className="w-full h-full object-cover"
               autoPlay
               loop
