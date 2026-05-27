@@ -11,40 +11,15 @@ import LiquidRevealHero from '@/components/liquid-reveal/LiquidRevealHero';
 import PerspectiveHighlightDemo from '@/components/perspective/PerspectiveHighlight';
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
+import PhantomLabGridClient from '@/components/phantom-lab-grid/PhantomLabGridClient';
+import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
 import type { Project } from '@/lib/types';
-
-const LIVE_DEMOS: Record<string, () => ReactNode> = {
-  'morphing-svg-mask-slider': () => (
-    <div className="w-full max-w-4xl mx-auto">
-      <MorphingSvgMaskSlider
-        images={[
-          'https://picsum.photos/seed/morph1/1200/750',
-          'https://picsum.photos/seed/morph2/1200/750',
-          'https://picsum.photos/seed/morph3/1200/750',
-          'https://picsum.photos/seed/morph4/1200/750',
-          'https://picsum.photos/seed/morph5/1200/750',
-        ]}
-      />
-    </div>
-  ),
-  'liquid-reveal-hero': () => (
-    <div className="aspect-[16/9] w-full">
-      <LiquidRevealHero
-        portraitSrc="/images/projects/lando/portrait.webp"
-        revealSrc="/images/projects/lando/helmet.webp"
-        revealScale={0.75}
-      />
-    </div>
-  ),
-  '3d-perspective-highlight': () => <PerspectiveHighlightDemo />,
-  'book-demo-button': () => <BookDemoButtonDemo />,
-  'nextjs-conf-cta': () => <NextjsConfCTADemo />,
-};
 
 type Props = {
   project: Project;
   videoSrc: string | null;
   gifSrc: string | null;
+  phantomLabCards?: CardData[];
 };
 
 function CopyIcon({ className }: { className?: string }) {
@@ -105,11 +80,50 @@ function DownloadIcon({ className }: { className?: string }) {
   );
 }
 
-export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
+export default function ProjectClient({
+  project,
+  videoSrc,
+  gifSrc,
+  phantomLabCards,
+}: Props) {
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const [showFade, setShowFade] = useState(true);
   const preRef = useRef<HTMLPreElement>(null);
-  const hasLiveDemo = Boolean(LIVE_DEMOS[project.slug.current]);
+
+  const liveDemos: Record<string, () => ReactNode> = {
+    'morphing-svg-mask-slider': () => (
+      <div className="w-full max-w-4xl mx-auto">
+        <MorphingSvgMaskSlider
+          images={[
+            'https://picsum.photos/seed/morph1/1200/750',
+            'https://picsum.photos/seed/morph2/1200/750',
+            'https://picsum.photos/seed/morph3/1200/750',
+            'https://picsum.photos/seed/morph4/1200/750',
+            'https://picsum.photos/seed/morph5/1200/750',
+          ]}
+        />
+      </div>
+    ),
+    'liquid-reveal-hero': () => (
+      <div className="aspect-[16/9] w-full">
+        <LiquidRevealHero
+          portraitSrc="/images/projects/lando/portrait.webp"
+          revealSrc="/images/projects/lando/helmet.webp"
+          revealScale={0.75}
+        />
+      </div>
+    ),
+    '3d-perspective-highlight': () => <PerspectiveHighlightDemo />,
+    'book-demo-button': () => <BookDemoButtonDemo />,
+    'nextjs-conf-cta': () => <NextjsConfCTADemo />,
+    'phantom-lab-grid': () =>
+      phantomLabCards && phantomLabCards.length > 0 ? (
+        <div className="relative w-full h-full min-h-[24rem]">
+          <PhantomLabGridClient cards={phantomLabCards} />
+        </div>
+      ) : null,
+  };
+  const hasLiveDemo = Boolean(liveDemos[project.slug.current]);
 
   useEffect(() => {
     const pre = preRef.current;
@@ -231,7 +245,7 @@ export default function ProjectClient({ project, videoSrc, gifSrc }: Props) {
                 {hasLiveDemo ? (
                   <div className="bg-white flex flex-col flex-1 min-h-0">
                     <div className="flex-1 flex items-center justify-center min-h-[24rem] p-6 overflow-auto">
-                      {LIVE_DEMOS[project.slug.current]()}
+                      {liveDemos[project.slug.current]()}
                     </div>
                     <div className="border-t border-base-100 py-3 px-4 shrink-0">
                       <Text tag="p" variant="textXS" className="text-base-500 text-center">

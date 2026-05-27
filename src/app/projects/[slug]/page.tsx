@@ -8,6 +8,11 @@ import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import { getAllProjects, getProjectBySlug, getAllProjectSlugs } from '@/lib/queries';
 import { urlFor, fileUrl } from '@/lib/sanity';
+import {
+  getPhantomLabGridProject,
+  PHANTOM_LAB_GRID_SLUG,
+} from '@/lib/synthetic-projects';
+import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
 import ProjectClient from './ProjectClient';
 
 const CARD_IMAGES = [
@@ -29,7 +34,12 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+  let project = await getProjectBySlug(slug);
+  // Fall back to a synthetic project for slugs we host locally without a
+  // Sanity record (e.g. the WebGL Phantom Lab Grid demo).
+  if (!project && slug === PHANTOM_LAB_GRID_SLUG) {
+    project = await getPhantomLabGridProject();
+  }
   if (!project) notFound();
 
   const videoSrc =
@@ -47,9 +57,39 @@ export default async function ProjectPage({
     .filter((p) => p._id !== project._id)
     .slice(0, 4);
 
+  // For the Phantom Lab Grid animation, prebuild the card list so the
+  // WebGL grid can render the full project gallery without re-fetching
+  // from the client.
+  const phantomLabCards: CardData[] | undefined =
+    slug === 'phantom-lab-grid'
+      ? allProjects.map((p) => {
+          let imageSrc = '';
+          if (p.thumbnailType === 'gif' && p.thumbnailGif?.asset?._ref) {
+            imageSrc = urlFor(p.thumbnailGif).width(800).fit('max').url();
+          } else {
+            imageSrc = `https://picsum.photos/seed/${p.slug.current}/800/600`;
+          }
+          return {
+            title: p.title,
+            badge: p.category?.title ?? '',
+            description: p.description,
+            tags: p.technologies ?? [],
+            date: '',
+            image: imageSrc,
+            imageSrc,
+            slug: p.slug.current,
+          };
+        })
+      : undefined;
+
   return (
     <SiteShell hideNavigation showSearch>
-      <ProjectClient project={project} videoSrc={videoSrc} gifSrc={gifSrc} />
+      <ProjectClient
+        project={project}
+        videoSrc={videoSrc}
+        gifSrc={gifSrc}
+        phantomLabCards={phantomLabCards}
+      />
 
       {relatedProjects.length > 0 && (
         <section className="border-t border-base-100">

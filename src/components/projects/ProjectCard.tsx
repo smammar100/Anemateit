@@ -20,11 +20,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   const isBookDemo = project.slug.current === 'book-demo-button';
   const isNextjsConfCta = project.slug.current === 'nextjs-conf-cta';
   const isPhantomLabGrid = project.slug.current === 'phantom-lab-grid';
-  // Phantom Lab Grid is a synthetic homepage entry — route to the lab
-  // preview until a real Sanity project with this slug exists.
-  const url = isPhantomLabGrid
-    ? '/lab/phantom-lab-grid'
-    : `/projects/${project.slug.current}`;
+  const url = `/projects/${project.slug.current}`;
 
   const videoSrc =
     project.thumbnailType === 'video' && project.thumbnailVideo?.asset?._ref
