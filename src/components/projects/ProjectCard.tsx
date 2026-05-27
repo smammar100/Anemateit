@@ -4,6 +4,7 @@ import { urlFor, fileUrl } from '@/lib/sanity';
 import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
+import PhantomLabGridThumbnail from '@/components/phantom-lab-grid/PhantomLabGridThumbnail';
 import type { Project } from '@/lib/types';
 
 const CARD_IMAGES = [
@@ -15,10 +16,15 @@ const CARD_IMAGES = [
 ];
 
 export default function ProjectCard({ project }: { project: Project }) {
-  const url = `/projects/${project.slug.current}`;
   const isMorphingSlider = project.slug.current === 'morphing-svg-mask-slider';
   const isBookDemo = project.slug.current === 'book-demo-button';
   const isNextjsConfCta = project.slug.current === 'nextjs-conf-cta';
+  const isPhantomLabGrid = project.slug.current === 'phantom-lab-grid';
+  // Phantom Lab Grid is a synthetic homepage entry — route to the lab
+  // preview until a real Sanity project with this slug exists.
+  const url = isPhantomLabGrid
+    ? '/lab/phantom-lab-grid'
+    : `/projects/${project.slug.current}`;
 
   const videoSrc =
     project.thumbnailType === 'video' && project.thumbnailVideo?.asset?._ref
@@ -36,7 +42,9 @@ export default function ProjectCard({ project }: { project: Project }) {
         className="relative p-4 bg-base-50 rounded-lg overflow-hidden"
         {...(isNextjsConfCta ? { 'data-cta-trigger': '' } : {})}
       >
-        {isMorphingSlider ? (
+        {isPhantomLabGrid ? (
+          <PhantomLabGridThumbnail />
+        ) : isMorphingSlider ? (
           <div className="aspect-[8/5] w-full rounded shadow bg-white overflow-hidden flex items-center justify-center p-4">
             <div className="w-full">
               <MorphingSvgMaskSlider
