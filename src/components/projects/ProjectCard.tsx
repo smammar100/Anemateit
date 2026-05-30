@@ -7,6 +7,7 @@ import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import PhantomLabGridThumbnail from '@/components/phantom-lab-grid/PhantomLabGridThumbnail';
 import TextVideoDemo from '@/components/text-video/TextVideoDemo';
 import DiaSpectrumFooterDemo from '@/components/dia-spectrum/DiaSpectrumFooterDemo';
+import AISphereDemo from '@/components/ai-sphere/AISphereDemo';
 import type { Project } from '@/lib/types';
 
 const CARD_IMAGES = [
@@ -19,6 +20,7 @@ const CARD_IMAGES = [
 
 export default function ProjectCard({ project }: { project: Project }) {
   const isTextVideo = project.slug.current === 'text-video';
+  const isAISphere = project.slug.current === 'ai-sphere';
   const isDiaSpectrum = project.slug.current === 'dia-browser-footer-color-spectrum';
   const isMorphingSlider = project.slug.current === 'morphing-svg-mask-slider';
   const isBookDemo = project.slug.current === 'book-demo-button';
@@ -45,6 +47,10 @@ export default function ProjectCard({ project }: { project: Project }) {
         {isTextVideo ? (
           <div className="aspect-[8/5] w-full rounded shadow overflow-hidden">
             <TextVideoDemo compact />
+          </div>
+        ) : isAISphere ? (
+          <div className="aspect-[8/5] w-full rounded shadow overflow-hidden bg-black">
+            <AISphereDemo compact />
           </div>
         ) : isDiaSpectrum ? (
           <div className="aspect-[8/5] w-full rounded shadow overflow-hidden">

@@ -15,6 +15,8 @@ import {
   TEXT_VIDEO_SLUG,
   getDiaSpectrumProject,
   DIA_SPECTRUM_SLUG,
+  getAISphereProject,
+  AI_SPHERE_SLUG,
   loadPromptFile,
 } from '@/lib/synthetic-projects';
 import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
@@ -47,6 +49,9 @@ export default async function ProjectPage({
   }
   if (!project && slug === DIA_SPECTRUM_SLUG) {
     project = await getDiaSpectrumProject();
+  }
+  if (!project && slug === AI_SPHERE_SLUG) {
+    project = await getAISphereProject();
   }
   if (!project && slug === PHANTOM_LAB_GRID_SLUG) {
     project = await getPhantomLabGridProject();

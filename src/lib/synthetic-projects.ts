@@ -11,6 +11,7 @@ import type { Project } from './types';
 
 export const TEXT_VIDEO_SLUG = 'text-video';
 export const DIA_SPECTRUM_SLUG = 'dia-browser-footer-color-spectrum';
+export const AI_SPHERE_SLUG = 'ai-sphere';
 export const PHANTOM_LAB_GRID_SLUG = 'phantom-lab-grid';
 
 const promptFileCache = new Map<string, string | null>();
@@ -72,6 +73,21 @@ export async function getDiaSpectrumProject(): Promise<Project> {
       'A scroll-revealed color-spectrum footer inspired by Dia Browser — nine blurred gradient bars forming a light spectrum, with live theme switching, blur toggle, and randomize. Built on GSAP.',
     thumbnailType: 'gif',
     technologies: ['React', 'TypeScript', 'GSAP', 'SVG', 'Tailwind CSS'],
+    copyPrompt,
+  };
+}
+
+export async function getAISphereProject(): Promise<Project> {
+  const copyPrompt = (await loadPromptFile(AI_SPHERE_SLUG)) ?? '';
+  return {
+    _id: 'synthetic-ai-sphere',
+    _type: 'project',
+    title: 'AI Sphere',
+    slug: { _type: 'slug', current: AI_SPHERE_SLUG },
+    description:
+      'A true-3D plasma sphere — a glass fresnel shell wrapping volumetric FBM gas that you can spin in real 3D, with a glowing flower-bloom anchored at its centre. Shifts color across 5 states. Built on Three.js.',
+    thumbnailType: 'gif',
+    technologies: ['React', 'TypeScript', 'Three.js', 'WebGL', 'GLSL'],
     copyPrompt,
   };
 }

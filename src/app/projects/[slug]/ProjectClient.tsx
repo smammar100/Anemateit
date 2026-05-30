@@ -14,6 +14,7 @@ import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import PhantomLabGridClient from '@/components/phantom-lab-grid/PhantomLabGridClient';
 import TextVideoDemo from '@/components/text-video/TextVideoDemo';
 import DiaSpectrumFooterDemo from '@/components/dia-spectrum/DiaSpectrumFooterDemo';
+import AISphereDemo from '@/components/ai-sphere/AISphereDemo';
 import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
 import type { Project } from '@/lib/types';
 
@@ -101,6 +102,11 @@ export default function ProjectClient({
     'dia-browser-footer-color-spectrum': () => (
       <div className="relative w-full h-full min-h-[26rem]">
         <DiaSpectrumFooterDemo />
+      </div>
+    ),
+    'ai-sphere': () => (
+      <div className="relative w-full h-full min-h-[26rem]">
+        <AISphereDemo />
       </div>
     ),
     'morphing-svg-mask-slider': () => (

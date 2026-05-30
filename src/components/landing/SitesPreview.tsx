@@ -6,20 +6,29 @@ import {
   getPhantomLabGridProject,
   getTextVideoProject,
   getDiaSpectrumProject,
+  getAISphereProject,
 } from '@/lib/synthetic-projects';
 import type { Project } from '@/lib/types';
 import SitesPreviewClient from './SitesPreviewClient';
 
 export default async function SitesPreview() {
-  const [sanityProjects, categories, diaSpectrum, textVideo, phantomLabGrid] =
-    await Promise.all([
-      getAllProjects(),
-      getAllCategories(),
-      getDiaSpectrumProject(),
-      getTextVideoProject(),
-      getPhantomLabGridProject(),
-    ]);
+  const [
+    sanityProjects,
+    categories,
+    aiSphere,
+    diaSpectrum,
+    textVideo,
+    phantomLabGrid,
+  ] = await Promise.all([
+    getAllProjects(),
+    getAllCategories(),
+    getAISphereProject(),
+    getDiaSpectrumProject(),
+    getTextVideoProject(),
+    getPhantomLabGridProject(),
+  ]);
   const projects: Project[] = [
+    aiSphere,
     diaSpectrum,
     textVideo,
     phantomLabGrid,
