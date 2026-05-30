@@ -12,7 +12,7 @@ export default function SignInPage() {
             <Text
               tag="h1"
               variant="displayLG"
-              className="text-base-900 font-display font-light"
+              className="text-base-900 font-display font-medium tracking-tight"
             >
               Sign in
             </Text>

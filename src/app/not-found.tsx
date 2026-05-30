@@ -16,7 +16,7 @@ export default function NotFound() {
               <Text
                 tag="h1"
                 variant="displayLG"
-                className="text-base-900 font-display font-light"
+                className="text-base-900 font-display font-medium tracking-tight"
               >
                 Error 404
               </Text>

@@ -30,7 +30,7 @@ export default async function SitePage({
               <Text
                 tag="h1"
                 variant="displayMD"
-                className="text-base-900 font-display font-thin capitalize"
+                className="text-base-900 font-display font-medium tracking-tight capitalize"
               >
                 {site.title}
               </Text>
@@ -91,7 +91,7 @@ export default async function SitePage({
             <Text
               tag="h2"
               variant="displaySM"
-              className="text-base-900 font-display font-thin"
+              className="text-base-900 font-display font-medium tracking-tight"
             >
               Latest additions
             </Text>

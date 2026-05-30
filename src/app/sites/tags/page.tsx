@@ -15,7 +15,7 @@ export default function SitesTagsIndex() {
           <Text
             tag="h1"
             variant="displayLG"
-            className="text-base-900 font-display font-thin text-center"
+            className="text-base-900 font-display font-medium tracking-tight text-center"
           >
             We got tags!
           </Text>

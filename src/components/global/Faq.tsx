@@ -63,7 +63,7 @@ export default function Faq() {
           <Text
             tag="h2"
             variant="displayLG"
-            className="text-base-900 font-display font-thin"
+            className="text-base-900 font-display font-medium tracking-tight"
           >
             Frequently Asked Questions
           </Text>

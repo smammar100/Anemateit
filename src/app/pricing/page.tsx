@@ -39,7 +39,7 @@ export default function PricingPage() {
             <Text
               tag="h1"
               variant="displayLG"
-              className="text-base-900 font-display font-light"
+              className="text-base-900 font-display font-medium tracking-tight"
             >
               <span className="block">Access the full library.</span>
               <span className="block">Use it like a pro.</span>
@@ -60,7 +60,7 @@ export default function PricingPage() {
                     <Text
                       tag="p"
                       variant="displaySM"
-                      className="text-base-900 text-balance font-display font-light"
+                      className="text-base-900 text-balance font-display font-medium tracking-tight"
                     >
                       {plan.name}
                     </Text>
@@ -73,13 +73,13 @@ export default function PricingPage() {
                       <Text
                         tag="p"
                         variant="displayLG"
-                        className="text-base-900 font-display font-light"
+                        className="text-base-900 font-display font-medium tracking-tight"
                       >
                         {plan.priceStatic}
                       </Text>
                     ) : (
                       <Text tag="p" variant="displayLG" className="text-base-900">
-                        <span className="tracking-tighter font-display font-light">
+                        <span className="font-display font-medium tracking-tighter">
                           {plan.priceMonthly ?? ''}
                         </span>
                         {plan.priceMonthly && (

@@ -14,7 +14,7 @@ export default function Footer() {
             <Text
               tag="h3"
               variant="displayLG"
-              className="text-base-900 font-display font-light mt-12"
+              className="text-base-900 font-display font-medium tracking-tight mt-12"
             >
               Stay connected to the future of animation
             </Text>
