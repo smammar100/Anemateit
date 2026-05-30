@@ -34,7 +34,9 @@ export default async function SitesPreview() {
     phantomLabGrid,
     ...sanityProjects,
   ];
-  const initialVisible = 7;
+  // Keep this a multiple of the widest grid (lg:grid-cols-4) so the initial
+  // rows fill completely — otherwise the last row leaves an empty cell.
+  const initialVisible = 8;
 
   return (
     <section>
