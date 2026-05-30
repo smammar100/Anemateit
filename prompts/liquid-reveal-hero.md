@@ -1,5 +1,7 @@
 # Liquid Reveal Hero
 
+> **Recreate this exact component.** Paste this entire prompt into any AI coding tool (Claude Code, Cursor, v0, Lovable, Bolt…) — it's self-contained, with the full source (including the GLSL shaders) included below. **Stack:** React 18 + TypeScript, styled with Tailwind CSS (swap the `className`s for inline styles if you're not using Tailwind). **Dependencies:** `npm i three`. The demo uses Picsum placeholder images — swap in your own portrait/reveal images.
+
 Build a hero where a portrait reveals an alternate "reveal" image (helmet, alt shot, anything) under the cursor, with a **liquid-edged brush mask** plus a **diagonal wireframe sweep** that shimmers across the lit area every few seconds. Two textured planes drawn to a WebGL canvas through a custom GLSL fragment shader. Inspired by landonorris.com (OFF+BRAND); shader adapted from a CodePen by Daniel Muñoz.
 
 ## Setup

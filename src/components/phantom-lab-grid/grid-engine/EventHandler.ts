@@ -90,6 +90,10 @@ export interface EventHandlerHost {
   performRaycast(): Mesh[];
   fadeInBackground(mesh: Mesh): void;
   fadeOutBackground(mesh: Mesh): void;
+  /** Resume the render loop. Called whenever input arrives. */
+  wake(): void;
+  /** Toggle the cameraAnimating flag so rAF stays awake during tweens. */
+  setCameraAnimating(on: boolean): void;
 }
 
 /**
@@ -167,15 +171,17 @@ export class EventHandler {
     this.velX = 0;
     this.velY = 0;
 
-    // Update pointer coordinates for raycasting
     this.host.updatePointerCoordinates(clientX, clientY);
+    this.host.wake();
 
     if (this.host.camera) {
+      this.host.setCameraAnimating(true);
       gsap.to(this.host.camera.position, {
         z: this.host.options.baseCameraZ * 1.3,
         duration: 0.3,
         ease: "power2.out",
         overwrite: true,
+        onComplete: () => this.host.setCameraAnimating(false),
       });
     }
   }
@@ -196,7 +202,6 @@ export class EventHandler {
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
 
-    // Check if movement is significant enough to disable click
     const movementDistance = Math.sqrt(
       Math.pow(clientX - this.host.startPosition.x, 2) +
       Math.pow(clientY - this.host.startPosition.y, 2),
@@ -209,14 +214,11 @@ export class EventHandler {
     const distanceX = (this.host.startPosition.x - clientX) * this.host.scroll.scale;
     const distanceY = (this.host.startPosition.y - clientY) * this.host.scroll.scale;
 
-    gsap.to(this.host.scroll.current, {
-      x: this.host.scrollPosition.x - distanceX,
-      y: this.host.scrollPosition.y + distanceY,
-      duration: 0.1,
-      ease: "power1.out",
-      overwrite: true,
-      onUpdate: () => this.host.updatePositions(),
-    });
+    // Direct write — the render loop is awake while isDown is true, so no
+    // per-event GSAP tween is needed and we avoid the overhead of spawning
+    // ~100 tweens/sec during a drag.
+    this.host.scroll.current.x = this.host.scrollPosition.x - distanceX;
+    this.host.scroll.current.y = this.host.scrollPosition.y + distanceY;
 
     const dx = clientX - this.prevClientX;
     const dy = clientY - this.prevClientY;
@@ -233,7 +235,6 @@ export class EventHandler {
   private onPointerUp(): void {
     this.host.isDown = false;
 
-    // Clear hover state when pointer is lifted
     if (this.host.currentHoveredTileKey) {
       const mesh = this.host.backgroundMeshMap.get(this.host.currentHoveredTileKey);
       if (mesh) {
@@ -243,15 +244,18 @@ export class EventHandler {
     }
 
     if (this.host.camera) {
+      this.host.setCameraAnimating(true);
       gsap.to(this.host.camera.position, {
         z: this.host.options.baseCameraZ,
         duration: 0.3,
         ease: "power2.out",
         overwrite: true,
+        onComplete: () => this.host.setCameraAnimating(false),
       });
     }
 
     this.host.applyReleaseInertia(this.velX, this.velY);
+    this.host.wake();
   }
 
   /**
@@ -297,6 +301,7 @@ export class EventHandler {
     }
 
     this.host.afterContainerResize?.();
+    this.host.wake();
   }
 
   /**
@@ -436,6 +441,7 @@ export class EventHandler {
     this.host.scroll.current.x += dx * s;
     this.host.scroll.current.y += dy * s;
     this.host.updatePositions();
+    this.host.wake();
   }
 
   /**

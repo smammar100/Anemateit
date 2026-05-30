@@ -5,6 +5,8 @@ import MorphingSvgMaskSlider from '@/components/morphing/MorphingSvgMaskSlider';
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import PhantomLabGridThumbnail from '@/components/phantom-lab-grid/PhantomLabGridThumbnail';
+import TextVideoDemo from '@/components/text-video/TextVideoDemo';
+import DiaSpectrumFooterDemo from '@/components/dia-spectrum/DiaSpectrumFooterDemo';
 import type { Project } from '@/lib/types';
 
 const CARD_IMAGES = [
@@ -16,6 +18,8 @@ const CARD_IMAGES = [
 ];
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const isTextVideo = project.slug.current === 'text-video';
+  const isDiaSpectrum = project.slug.current === 'dia-browser-footer-color-spectrum';
   const isMorphingSlider = project.slug.current === 'morphing-svg-mask-slider';
   const isBookDemo = project.slug.current === 'book-demo-button';
   const isNextjsConfCta = project.slug.current === 'nextjs-conf-cta';
@@ -38,7 +42,15 @@ export default function ProjectCard({ project }: { project: Project }) {
         className="relative p-4 bg-base-50 rounded-lg overflow-hidden"
         {...(isNextjsConfCta ? { 'data-cta-trigger': '' } : {})}
       >
-        {isPhantomLabGrid ? (
+        {isTextVideo ? (
+          <div className="aspect-[8/5] w-full rounded shadow overflow-hidden">
+            <TextVideoDemo compact />
+          </div>
+        ) : isDiaSpectrum ? (
+          <div className="aspect-[8/5] w-full rounded shadow overflow-hidden">
+            <DiaSpectrumFooterDemo compact />
+          </div>
+        ) : isPhantomLabGrid ? (
           <PhantomLabGridThumbnail />
         ) : isMorphingSlider ? (
           <div className="aspect-[8/5] w-full rounded shadow bg-white overflow-hidden flex items-center justify-center p-4">

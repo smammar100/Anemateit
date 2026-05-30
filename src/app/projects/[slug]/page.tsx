@@ -11,6 +11,11 @@ import { urlFor, fileUrl } from '@/lib/sanity';
 import {
   getPhantomLabGridProject,
   PHANTOM_LAB_GRID_SLUG,
+  getTextVideoProject,
+  TEXT_VIDEO_SLUG,
+  getDiaSpectrumProject,
+  DIA_SPECTRUM_SLUG,
+  loadPromptFile,
 } from '@/lib/synthetic-projects';
 import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
 import ProjectClient from './ProjectClient';
@@ -37,10 +42,24 @@ export default async function ProjectPage({
   let project = await getProjectBySlug(slug);
   // Fall back to a synthetic project for slugs we host locally without a
   // Sanity record (e.g. the WebGL Phantom Lab Grid demo).
+  if (!project && slug === TEXT_VIDEO_SLUG) {
+    project = await getTextVideoProject();
+  }
+  if (!project && slug === DIA_SPECTRUM_SLUG) {
+    project = await getDiaSpectrumProject();
+  }
   if (!project && slug === PHANTOM_LAB_GRID_SLUG) {
     project = await getPhantomLabGridProject();
   }
   if (!project) notFound();
+
+  // Prefer a committed prompts/{slug}.md file when present; otherwise keep the
+  // copyPrompt that came from Sanity (or the synthetic getter). This makes the
+  // repo prompt files the single source of truth for every project.
+  const filePrompt = await loadPromptFile(slug);
+  if (filePrompt !== null) {
+    project = { ...project, copyPrompt: filePrompt };
+  }
 
   const videoSrc =
     project.thumbnailType === 'video' && project.thumbnailVideo?.asset?._ref

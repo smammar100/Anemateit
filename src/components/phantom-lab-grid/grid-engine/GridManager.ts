@@ -27,6 +27,33 @@ import { gaussianBlurVertexShader, gaussianBlurFragmentShader } from "./shaders"
 
 import type { CardData, TileGroupData, TileUserData, CardTexturePair } from "./types";
 
+const FOREGROUND_VERTEX_SHADER = `
+  attribute vec2 uv;
+  attribute vec3 position;
+
+  uniform mat4 modelViewMatrix;
+  uniform mat4 projectionMatrix;
+
+  varying vec2 vUv;
+
+  void main() {
+    vUv = vec2(uv.x, 1.0 - uv.y);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const FOREGROUND_FRAGMENT_SHADER = `
+  precision highp float;
+
+  uniform sampler2D map;
+
+  varying vec2 vUv;
+
+  void main() {
+    gl_FragColor = texture2D(map, vUv);
+  }
+`;
+
 /**
  * Interface defining the required properties and methods that the GridManager
  * needs to access from the main InfiniteGrid class
@@ -75,6 +102,13 @@ export interface GridManagerHost {
 export class GridManager {
   private host: GridManagerHost;
   private isInitialized: boolean = false;
+
+  // Shared resources reused across every tile to avoid 162 program
+  // compilations + 162 geometry buffers for what is fundamentally 2
+  // shader pairs and 1 plane.
+  private sharedPlane: Plane | null = null;
+  private sharedForegroundProgram: Program | null = null;
+  private sharedBackgroundProgram: Program | null = null;
 
   /**
    * Creates a new GridManager instance
@@ -143,6 +177,25 @@ export class GridManager {
 
     const gl = this.host.renderer.gl;
 
+    this.sharedPlane = new Plane(gl, {
+      width: this.host.TILE_SIZE,
+      height: this.host.TILE_SIZE,
+    });
+    this.sharedForegroundProgram = new Program(gl, {
+      vertex: FOREGROUND_VERTEX_SHADER,
+      fragment: FOREGROUND_FRAGMENT_SHADER,
+      uniforms: { map: { value: null } },
+      transparent: true,
+      cullFace: false,
+    });
+    this.sharedBackgroundProgram = new Program(gl, {
+      vertex: gaussianBlurVertexShader,
+      fragment: gaussianBlurFragmentShader,
+      uniforms: { map: { value: null }, uOpacity: { value: 0 } },
+      transparent: true,
+      cullFace: false,
+    });
+
     this.host.tileGroupsData.forEach((groupData, groupIndex) => {
       const groupObject = new Transform();
       groupObject.position.set(groupData.basePos.x, groupData.basePos.y, groupData.basePos.z);
@@ -160,10 +213,7 @@ export class GridManager {
           const tileIndex = row * this.host.GRID_COLS + col;
           const tileKey = this.getTileKey(groupIndex, tileIndex);
 
-          // Create background mesh (for blur effects)
           this.createBackgroundMesh(gl, groupObject, groupIndex, tileIndex, tileKey, x, y);
-
-          // Create foreground mesh (for content display)
           this.createForegroundMesh(gl, groupObject, groupIndex, tileIndex, tileKey, x, y);
         }
       }
@@ -171,10 +221,11 @@ export class GridManager {
   }
 
   /**
-   * Creates a background mesh for blur effects
+   * Creates a background mesh that shares the global Plane + Program but
+   * carries per-mesh uniforms for its texture and hover opacity.
    */
   private createBackgroundMesh(
-    gl: any, // OGL context
+    gl: any,
     groupObject: Transform,
     groupIndex: number,
     tileIndex: number,
@@ -182,25 +233,41 @@ export class GridManager {
     x: number,
     y: number
   ): void {
-    const backgroundProgram = this.createBackgroundProgram(groupIndex, tileIndex);
-    const backgroundGeometry = new Plane(gl, {
-      width: this.host.TILE_SIZE,
-      height: this.host.TILE_SIZE,
-    });
+    if (!this.sharedPlane || !this.sharedBackgroundProgram) return;
+
+    const texture = this.getCardBackgroundTexture(groupIndex, tileIndex);
+    const uniforms = {
+      map: { value: texture },
+      uOpacity: { value: this.host.initialBackgroundOpacity },
+    };
+    this.host.staticUniforms.set(tileKey, uniforms);
+
     const backgroundMesh = new Mesh(gl, {
-      geometry: backgroundGeometry,
-      program: backgroundProgram,
+      geometry: this.sharedPlane,
+      program: this.sharedBackgroundProgram,
+    });
+    // All bg meshes share one Program, so we swap the program's uniforms
+    // to this mesh's values right before its draw call. OGL uploads
+    // uniforms in `program.use()`, which runs after `onBeforeRender`.
+    (backgroundMesh as any).meshUniforms = uniforms;
+    backgroundMesh.onBeforeRender(() => {
+      const u = this.sharedBackgroundProgram?.uniforms;
+      if (!u) return;
+      u.map.value = uniforms.map.value;
+      u.uOpacity.value = uniforms.uOpacity.value;
     });
     backgroundMesh.position.set(x, y, -0.01);
+    backgroundMesh.visible = uniforms.uOpacity.value > 0;
     backgroundMesh.setParent(groupObject);
     this.host.backgroundMeshMap.set(tileKey, backgroundMesh);
   }
 
   /**
-   * Creates a foreground mesh for content display
+   * Creates a foreground mesh that shares the global Plane + Program but
+   * carries per-mesh uniforms for its texture.
    */
   private createForegroundMesh(
-    gl: any, // OGL context
+    gl: any,
     groupObject: Transform,
     groupIndex: number,
     tileIndex: number,
@@ -208,19 +275,24 @@ export class GridManager {
     x: number,
     y: number
   ): void {
-    const foregroundProgram = this.createForegroundProgram(groupIndex, tileIndex);
-    const foregroundGeometry = new Plane(gl, {
-      width: this.host.TILE_SIZE,
-      height: this.host.TILE_SIZE,
-    });
+    if (!this.sharedPlane || !this.sharedForegroundProgram) return;
+
+    const texture = this.getCardForegroundTexture(groupIndex, tileIndex);
+    const uniforms = { map: { value: texture } };
+
     const foregroundMesh = new Mesh(gl, {
-      geometry: foregroundGeometry,
-      program: foregroundProgram,
+      geometry: this.sharedPlane,
+      program: this.sharedForegroundProgram,
+    });
+    (foregroundMesh as any).meshUniforms = uniforms;
+    foregroundMesh.onBeforeRender(() => {
+      const u = this.sharedForegroundProgram?.uniforms;
+      if (!u) return;
+      u.map.value = uniforms.map.value;
     });
     foregroundMesh.position.set(x, y, 0);
     foregroundMesh.setParent(groupObject);
 
-    // Store user data for interaction
     (foregroundMesh as any).userData = {
       groupIndex,
       tileIndex,
@@ -273,84 +345,6 @@ export class GridManager {
     if (this.host.cardTextures.length === 0) return null;
     const textureIndex = this.getCardTextureIndex(groupIndex, tileIndex);
     return this.host.cardTextures[textureIndex]?.background || null;
-  }
-
-  /**
-   * Creates a shader program for background tiles (with blur effects)
-   * @param groupIndex - The index of the tile group
-   * @param tileIndex - The index of the tile within the group
-   * @returns A configured Program for background rendering
-   */
-  private createBackgroundProgram(groupIndex: number, tileIndex: number): Program {
-    if (!this.host.renderer) throw new Error('Renderer not initialized');
-
-    const gl = this.host.renderer.gl;
-    const texture = this.getCardBackgroundTexture(groupIndex, tileIndex);
-    const texWidth = 512;
-    const texHeight = 512;
-
-    const uniforms = {
-      map: { value: texture },
-      resolution: { value: [texWidth, texHeight] },
-      uOpacity: { value: this.host.initialBackgroundOpacity },
-    };
-
-    this.host.staticUniforms.set(this.getTileKey(groupIndex, tileIndex), uniforms);
-
-    return new Program(gl, {
-      vertex: gaussianBlurVertexShader,
-      fragment: gaussianBlurFragmentShader,
-      uniforms: uniforms,
-      transparent: true,
-      cullFace: false,
-    });
-  }
-
-  /**
-   * Creates a shader program for foreground tiles (content display)
-   * @param groupIndex - The index of the tile group
-   * @param tileIndex - The index of the tile within the group
-   * @returns A configured Program for foreground rendering
-   */
-  private createForegroundProgram(groupIndex: number, tileIndex: number): Program {
-    if (!this.host.renderer) throw new Error('Renderer not initialized');
-
-    const gl = this.host.renderer.gl;
-    const texture = this.getCardForegroundTexture(groupIndex, tileIndex);
-
-    return new Program(gl, {
-      vertex: `
-        attribute vec2 uv;
-        attribute vec3 position;
-        
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        
-        varying vec2 vUv;
-        
-        void main() {
-          // Flip UV coordinates 180 degrees (both X and Y)
-          vUv = vec2(uv.x, 1.0 - uv.y);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragment: `
-        precision highp float;
-        
-        uniform sampler2D map;
-        
-        varying vec2 vUv;
-        
-        void main() {
-          gl_FragColor = texture2D(map, vUv);
-        }
-      `,
-      uniforms: {
-        map: { value: texture },
-      },
-      transparent: true,
-      cullFace: false,
-    });
   }
 
   /**
@@ -438,22 +432,18 @@ export class GridManager {
           const tileIndex = row * this.host.GRID_COLS + col;
           const tileKey = this.getTileKey(groupIndex, tileIndex);
 
-          // Update foreground mesh texture
           const foregroundMesh = this.host.foregroundMeshMap.get(tileKey);
-          if (foregroundMesh && foregroundMesh.program) {
-            const newForegroundTexture = this.getCardForegroundTexture(groupIndex, tileIndex);
-            if (newForegroundTexture) {
-              foregroundMesh.program.uniforms.map.value = newForegroundTexture;
-            }
+          const fgUniforms = (foregroundMesh as any)?.meshUniforms;
+          if (fgUniforms) {
+            const t = this.getCardForegroundTexture(groupIndex, tileIndex);
+            if (t) fgUniforms.map.value = t;
           }
 
-          // Update background mesh texture
           const backgroundMesh = this.host.backgroundMeshMap.get(tileKey);
-          if (backgroundMesh && backgroundMesh.program) {
-            const newBackgroundTexture = this.getCardBackgroundTexture(groupIndex, tileIndex);
-            if (newBackgroundTexture) {
-              backgroundMesh.program.uniforms.map.value = newBackgroundTexture;
-            }
+          const bgUniforms = (backgroundMesh as any)?.meshUniforms;
+          if (bgUniforms) {
+            const t = this.getCardBackgroundTexture(groupIndex, tileIndex);
+            if (t) bgUniforms.map.value = t;
           }
         }
       }
@@ -473,10 +463,8 @@ export class GridManager {
    * This is useful for cleanup or reinitialization
    */
   public clear(): void {
-    // Clear tile group data
     this.host.tileGroupsData = [];
 
-    // Clear group objects
     this.host.groupObjects.forEach((group) => {
       if (group && group.parent) {
         group.parent.removeChild(group);
@@ -484,13 +472,15 @@ export class GridManager {
     });
     this.host.groupObjects = [];
 
-    // Clear mesh maps
     this.host.foregroundMeshMap.clear();
     this.host.backgroundMeshMap.clear();
 
-    // Clear uniforms and textures
     this.host.staticUniforms.clear();
     this.host.cardTextures = [];
+
+    this.sharedPlane = null;
+    this.sharedForegroundProgram = null;
+    this.sharedBackgroundProgram = null;
 
     this.isInitialized = false;
   }

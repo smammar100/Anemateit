@@ -105,8 +105,6 @@ export class DisposalManager {
    * ```
    */
   public dispose(): void {
-    console.log('Starting InfiniteGrid disposal...');
-
     // Step 1: Cancel animation loops
     this.stopAnimationLoop();
 
@@ -130,8 +128,6 @@ export class DisposalManager {
 
     // Step 8: Clean up animation systems
     this.cleanupAnimationSystems();
-
-    console.log('InfiniteGrid disposal completed successfully');
   }
 
   /**
@@ -303,8 +299,6 @@ export class DisposalManager {
    * but clears dynamic content. Useful for reinitialization scenarios.
    */
   public partialCleanup(): void {
-    console.log('Starting partial InfiniteGrid cleanup...');
-
     // Stop animations but don't destroy everything
     this.stopAnimationLoop();
 
@@ -319,8 +313,6 @@ export class DisposalManager {
     this.host.foregroundMeshMap.clear();
     this.host.backgroundMeshMap.clear();
     this.host.staticUniforms.clear();
-
-    console.log('Partial cleanup completed');
   }
 
   /**

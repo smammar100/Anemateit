@@ -9,23 +9,75 @@ import type { Project } from './types';
  * published.
  */
 
+export const TEXT_VIDEO_SLUG = 'text-video';
+export const DIA_SPECTRUM_SLUG = 'dia-browser-footer-color-spectrum';
 export const PHANTOM_LAB_GRID_SLUG = 'phantom-lab-grid';
 
-let cachedPhantomPrompt: string | null = null;
+const promptFileCache = new Map<string, string | null>();
+const SLUG_RE = /^[a-z0-9-]+$/;
 
-async function readPhantomLabGridPrompt(): Promise<string> {
-  if (cachedPhantomPrompt !== null) return cachedPhantomPrompt;
-  const promptPath = path.join(process.cwd(), 'prompts', 'phantom-lab-grid.md');
+/**
+ * Reads `prompts/{slug}.md` and returns its verbatim contents, or `null`
+ * when no such file exists. This makes the committed prompt files the
+ * single source of truth for a project's copy prompt — `/projects/[slug]`
+ * prefers the file and falls back to the Sanity `copyPrompt` only when no
+ * file is present. The slug is validated against the kebab-case pattern to
+ * prevent path traversal; results (including the `null` "absent" result)
+ * are cached in-process.
+ */
+export async function loadPromptFile(slug: string): Promise<string | null> {
+  if (!SLUG_RE.test(slug)) return null;
+  if (promptFileCache.has(slug)) return promptFileCache.get(slug)!;
+
+  const promptPath = path.join(process.cwd(), 'prompts', `${slug}.md`);
+  let contents: string | null;
   try {
-    cachedPhantomPrompt = await fs.readFile(promptPath, 'utf8');
-  } catch {
-    cachedPhantomPrompt = '';
+    contents = await fs.readFile(promptPath, 'utf8');
+  } catch (err) {
+    // Missing file → fall back to Sanity. Re-throw anything that is not
+    // ENOENT so genuine IO/permission faults are not silently swallowed.
+    if ((err as NodeJS.ErrnoException)?.code === 'ENOENT') {
+      contents = null;
+    } else {
+      throw err;
+    }
   }
-  return cachedPhantomPrompt;
+  promptFileCache.set(slug, contents);
+  return contents;
+}
+
+export async function getTextVideoProject(): Promise<Project> {
+  const copyPrompt = (await loadPromptFile(TEXT_VIDEO_SLUG)) ?? '';
+  return {
+    _id: 'synthetic-text-video',
+    _type: 'project',
+    title: 'Text Video',
+    slug: { _type: 'slug', current: TEXT_VIDEO_SLUG },
+    description:
+      'CSS background-clip text effect — a GIF clipped to the letterforms of your heading. Achieves in pure CSS what used to require canvas compositing.',
+    thumbnailType: 'gif',
+    technologies: ['React', 'CSS', 'Tailwind CSS'],
+    copyPrompt,
+  };
+}
+
+export async function getDiaSpectrumProject(): Promise<Project> {
+  const copyPrompt = (await loadPromptFile(DIA_SPECTRUM_SLUG)) ?? '';
+  return {
+    _id: 'synthetic-dia-browser-footer-color-spectrum',
+    _type: 'project',
+    title: 'Dia Browser Footer Color Spectrum',
+    slug: { _type: 'slug', current: DIA_SPECTRUM_SLUG },
+    description:
+      'A scroll-revealed color-spectrum footer inspired by Dia Browser — nine blurred gradient bars forming a light spectrum, with live theme switching, blur toggle, and randomize. Built on GSAP.',
+    thumbnailType: 'gif',
+    technologies: ['React', 'TypeScript', 'GSAP', 'SVG', 'Tailwind CSS'],
+    copyPrompt,
+  };
 }
 
 export async function getPhantomLabGridProject(): Promise<Project> {
-  const copyPrompt = await readPhantomLabGridPrompt();
+  const copyPrompt = (await loadPromptFile(PHANTOM_LAB_GRID_SLUG)) ?? '';
   return {
     _id: 'synthetic-phantom-lab-grid',
     _type: 'project',

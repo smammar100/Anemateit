@@ -12,6 +12,8 @@ import PerspectiveHighlightDemo from '@/components/perspective/PerspectiveHighli
 import BookDemoButtonDemo from '@/components/book-demo/BookDemoButtonDemo';
 import NextjsConfCTADemo from '@/components/nextjs-conf-cta/NextjsConfCTADemo';
 import PhantomLabGridClient from '@/components/phantom-lab-grid/PhantomLabGridClient';
+import TextVideoDemo from '@/components/text-video/TextVideoDemo';
+import DiaSpectrumFooterDemo from '@/components/dia-spectrum/DiaSpectrumFooterDemo';
 import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
 import type { Project } from '@/lib/types';
 
@@ -91,6 +93,16 @@ export default function ProjectClient({
   const preRef = useRef<HTMLPreElement>(null);
 
   const liveDemos: Record<string, () => ReactNode> = {
+    'text-video': () => (
+      <div className="w-full h-full flex items-center justify-center">
+        <TextVideoDemo />
+      </div>
+    ),
+    'dia-browser-footer-color-spectrum': () => (
+      <div className="relative w-full h-full min-h-[26rem]">
+        <DiaSpectrumFooterDemo />
+      </div>
+    ),
     'morphing-svg-mask-slider': () => (
       <div className="w-full max-w-4xl mx-auto">
         <MorphingSvgMaskSlider
@@ -124,6 +136,12 @@ export default function ProjectClient({
       ) : null,
   };
   const hasLiveDemo = Boolean(liveDemos[project.slug.current]);
+
+  const demoCaptions: Record<string, string> = {
+    'dia-browser-footer-color-spectrum': 'Scroll to see the magic.',
+  };
+  const demoCaption =
+    demoCaptions[project.slug.current] ?? 'Live demo — interact with it.';
 
   useEffect(() => {
     const pre = preRef.current;
@@ -249,7 +267,7 @@ export default function ProjectClient({
                     </div>
                     <div className="border-t border-base-100 py-3 px-4 shrink-0">
                       <Text tag="p" variant="textXS" className="text-base-500 text-center">
-                        Live demo — interact with it.
+                        {demoCaption}
                       </Text>
                     </div>
                   </div>

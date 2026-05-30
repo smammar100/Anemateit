@@ -1,5 +1,7 @@
 # Next.js Conf 2025 CTA — Random Pixel Scatter Button
 
+> **Recreate this exact component.** Paste this entire prompt into any AI coding tool (Claude Code, Cursor, v0, Lovable, Bolt…) — it's self-contained, with the full source included below. **Stack:** React 18 + TypeScript, styled with Tailwind CSS (swap the `className`s for inline styles if you're not using Tailwind). **Dependencies:** none — pure React + CSS.
+
 A bold call-to-action button inspired by the Next.js Conf 2025 "Get Tickets" CTA. A blue button sits inside a white card. On hover, white pixels **flash on and off at chaotic, fully-independent random times** across the entire button surface — every pixel decides when to appear and disappear on its own, so the pattern at any given frame is pure scatter, not a clean wave. A small directional bias means more activity drifts toward the centre early on enter (and toward the edges early on leave) without producing a visible wavefront.
 
 ## Setup

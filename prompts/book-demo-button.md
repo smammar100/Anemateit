@@ -1,5 +1,7 @@
 # Book Demo Button — Sliding Accent + Dot-Wave Chevrons
 
+> **Recreate this exact component.** Paste this entire prompt into any AI coding tool (Claude Code, Cursor, v0, Lovable, Bolt…) — it's self-contained, with the full source included below. **Stack:** React 18 + TypeScript, styled with Tailwind CSS (swap the `className`s for inline styles if you're not using Tailwind). **Dependencies:** `npm i clsx tailwind-merge`.
+
 A dark pill-shaped CTA button with a colored accent slab pinned to the left. The slab contains five dot-based double-chevron icons that pulse in a cascading wave. On hover, the slab slides outward and expands to fill the whole button while the label stays visible — a single CSS transition on `width` with an easing curve does the work. Eight named color variants ship out of the box.
 
 ## Setup

@@ -95,6 +95,15 @@ export class InfiniteGridClass
   public animationFrameId: number | null;
   public tileGroupsData: TileGroupData[];
 
+  /** Number of consecutive idle frames seen — pause after a small grace
+   *  period so GSAP-tween onUpdate side effects flush. */
+  private idleFrameCount = 0;
+  private cameraAnimating = false;
+  /** True when the IntersectionObserver reports the grid is on-screen. */
+  private isOnScreen = true;
+  private visibilityObserver: IntersectionObserver | null = null;
+  private containerResizeObserver: ResizeObserver | null = null;
+
   public eventHandler?: EventHandler;
   public gridManager: GridManager;
   private disposalManager: DisposalManager;
@@ -195,12 +204,46 @@ export class InfiniteGridClass
     await this.gridManager.initialize();
 
     this.eventHandler?.initialize();
+    this.setupVisibilityObserver();
+    this.setupContainerResizeObserver();
 
     // Light intro animation: settle from slight distortion into resting params.
     this.animatePostProcessing(-0.1, 0.3, 1.25, 1.5, 1.5, 'power3.out');
 
     this.updatePositions();
-    this.render();
+    this.idleFrameCount = 0;
+    this.animationFrameId = requestAnimationFrame(this.render);
+  }
+
+  private setupVisibilityObserver(): void {
+    if (typeof IntersectionObserver === 'undefined') return;
+    this.visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          this.setOnScreen(entry.isIntersecting);
+        }
+      },
+      { threshold: 0 },
+    );
+    this.visibilityObserver.observe(this.container);
+  }
+
+  private setupContainerResizeObserver(): void {
+    if (typeof ResizeObserver === 'undefined') return;
+    this.containerResizeObserver = new ResizeObserver(() => {
+      const w = this.container.clientWidth;
+      const h = this.container.clientHeight;
+      if (w === 0 || h === 0) return;
+      if (this.camera) {
+        this.camera.aspect = w / h;
+        this.camera.perspective({ aspect: w / h });
+      }
+      this.renderer?.setSize(w, h);
+      this.sceneRenderTarget?.setSize(w, h);
+      this.postProcessShader?.resize(w, h);
+      this.wake();
+    });
+    this.containerResizeObserver.observe(this.container);
   }
 
   private setupRenderer(): void {
@@ -211,11 +254,16 @@ export class InfiniteGridClass
       this.container.ownerDocument.createElement('canvas').getContext('webgl');
     if (!gl) throw new Error('WebGL not supported');
 
+    // Cap DPR at 2 — on 3x phone displays this is the difference between
+    // ~2x and ~4x fragment work for an effect that doesn't benefit visibly
+    // from the extra resolution.
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
     this.renderer = new Renderer({
       canvas: gl.canvas as HTMLCanvasElement,
       width: this.container.clientWidth,
       height: this.container.clientHeight,
-      dpr: window.devicePixelRatio,
+      dpr,
       alpha: true,
       antialias: true,
     });
@@ -369,29 +417,69 @@ export class InfiniteGridClass
   }
 
   public fadeInBackground(mesh: Mesh): void {
-    if (mesh.program?.uniforms.uOpacity) {
-      gsap.to(mesh.program.uniforms.uOpacity, {
-        value: this.hoveredBackgroundOpacity,
-        duration: this.hoverTransitionDuration,
-        ease: this.hoverEase,
-        overwrite: true,
-      });
-    }
+    const u = (mesh as any).meshUniforms;
+    if (!u?.uOpacity) return;
+    mesh.visible = true;
+    this.wake?.();
+    gsap.to(u.uOpacity, {
+      value: this.hoveredBackgroundOpacity,
+      duration: this.hoverTransitionDuration,
+      ease: this.hoverEase,
+      overwrite: true,
+      onUpdate: () => this.wake?.(),
+    });
   }
 
   public fadeOutBackground(mesh: Mesh): void {
-    if (mesh.program?.uniforms.uOpacity) {
-      gsap.to(mesh.program.uniforms.uOpacity, {
-        value: this.initialBackgroundOpacity,
-        duration: this.hoverTransitionDuration,
-        ease: this.hoverEase,
-        overwrite: true,
-      });
-    }
+    const u = (mesh as any).meshUniforms;
+    if (!u?.uOpacity) return;
+    this.wake?.();
+    gsap.to(u.uOpacity, {
+      value: this.initialBackgroundOpacity,
+      duration: this.hoverTransitionDuration,
+      ease: this.hoverEase,
+      overwrite: true,
+      onUpdate: () => this.wake?.(),
+      onComplete: () => {
+        if (u.uOpacity.value <= 0) mesh.visible = false;
+      },
+    });
   }
 
   public getCardDataForTile(groupIndex: number, tileIndex: number): CardData {
     return this.gridManager.getCardDataForTile(groupIndex, tileIndex);
+  }
+
+  /** Indicates the render loop has real work to do this frame. */
+  private isBusy(): boolean {
+    if (this.isDown) return true;
+    if (this.cameraAnimating) return true;
+    if (Math.abs(this.scrollVelocity.x) > 1e-7) return true;
+    if (Math.abs(this.scrollVelocity.y) > 1e-7) return true;
+    return false;
+  }
+
+  /** Resume the rAF loop. Safe to call repeatedly; no-ops if already running. */
+  public wake = (): void => {
+    this.idleFrameCount = 0;
+    if (!this.isOnScreen) return;
+    if (this.animationFrameId !== null) return;
+    this.animationFrameId = requestAnimationFrame(this.render);
+  };
+
+  public setOnScreen(on: boolean): void {
+    this.isOnScreen = on;
+    if (on) this.wake();
+    else if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+  }
+
+  /** Inform the render loop the camera is being tweened. */
+  public setCameraAnimating(on: boolean): void {
+    this.cameraAnimating = on;
+    if (on) this.wake();
   }
 
   private render(): void {
@@ -433,6 +521,18 @@ export class InfiniteGridClass
     this.scroll.last.x = this.scroll.current.x;
     this.scroll.last.y = this.scroll.current.y;
 
+    // Idle skip: render a couple of trailing frames so GSAP-driven uniforms
+    // (uOpacity fades, postProcessShader animations) settle before we pause.
+    if (this.isBusy()) {
+      this.idleFrameCount = 0;
+    } else {
+      this.idleFrameCount += 1;
+    }
+
+    if (this.idleFrameCount >= 3 || !this.isOnScreen) {
+      this.animationFrameId = null;
+      return;
+    }
     this.animationFrameId = requestAnimationFrame(this.render);
   }
 
@@ -444,7 +544,12 @@ export class InfiniteGridClass
     delay = 0,
     ease = 'power2.out',
   ): void {
-    this.postProcessShader?.animate(
+    if (!this.postProcessShader) return;
+    // Keep the render loop awake while the post-process tween is running so
+    // the new uniforms actually paint to screen.
+    this.cameraAnimating = true;
+    this.wake();
+    this.postProcessShader.animate(
       targetDistortion,
       targetVignetteOffset,
       targetVignetteDarkness,
@@ -452,6 +557,10 @@ export class InfiniteGridClass
       delay,
       ease,
     );
+    const totalMs = (delay + duration) * 1000;
+    window.setTimeout(() => {
+      this.cameraAnimating = false;
+    }, totalMs + 32);
   }
 
   public setPostProcessingEnabled(enabled: boolean): void {
@@ -481,6 +590,10 @@ export class InfiniteGridClass
 
   public dispose(): void {
     this.onScrollTransform = null;
+    this.visibilityObserver?.disconnect();
+    this.visibilityObserver = null;
+    this.containerResizeObserver?.disconnect();
+    this.containerResizeObserver = null;
     this.disposalManager.dispose();
   }
 

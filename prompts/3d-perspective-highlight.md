@@ -1,5 +1,7 @@
 # 3D Perspective Card with Lifting Highlights
 
+> **Recreate this exact component.** Paste this entire prompt into any AI coding tool (Claude Code, Cursor, v0, Lovable, Bolt…) — it's self-contained, with the full source included below. **Stack:** React 18 + TypeScript, styled with Tailwind CSS (swap the `className`s for inline styles if you're not using Tailwind). **Dependencies:** none — pure React + CSS.
+
 A card that tilts toward your cursor in 3D space. Phrases marked as `<Highlight>` physically rise forward — a `translate` going one direction and a `box-shadow` going the other create the illusion of depth.
 
 ## Setup

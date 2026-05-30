@@ -33,6 +33,7 @@ export default function RootLayout({
     <html
       lang="en"
       className="scroll-smooth selection:bg-accent-50 selection:text-accent-500"
+      suppressHydrationWarning
     >
       <head>
         <link rel="preconnect" href="https://rsms.me/" />
@@ -52,7 +53,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-white flex flex-col lg:min-h-svh">{children}</body>
+      <body
+        className="bg-white flex flex-col lg:min-h-svh"
+        suppressHydrationWarning
+      >
+        {children}
+      </body>
     </html>
   );
 }

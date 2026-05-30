@@ -1,5 +1,7 @@
 # Morphing SVG Mask Slider
 
+> **Recreate this exact component.** Paste this entire prompt into any AI coding tool (Claude Code, Cursor, v0, Lovable, Bolt…) — it's self-contained, with the full source included below. **Stack:** React 18 + TypeScript, styled with Tailwind CSS (swap the `className`s for inline styles if you're not using Tailwind). **Dependencies:** `npm i framer-motion flubber`. The demo uses Picsum placeholder images — swap in your own.
+
 An image carousel where every slide lives inside an organic SVG clip-path — and the mask shape **morphs** into a completely different blob on each transition. Inspired by tuxkarma.co (Infinite Matter project section).
 
 ## Setup

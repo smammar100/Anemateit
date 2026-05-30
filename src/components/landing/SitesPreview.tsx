@@ -2,17 +2,29 @@ import Button from '@/components/fundations/elements/Button';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import ProjectCard from '@/components/projects/ProjectCard';
 import { getAllProjects, getAllCategories } from '@/lib/queries';
-import { getPhantomLabGridProject } from '@/lib/synthetic-projects';
+import {
+  getPhantomLabGridProject,
+  getTextVideoProject,
+  getDiaSpectrumProject,
+} from '@/lib/synthetic-projects';
 import type { Project } from '@/lib/types';
 import SitesPreviewClient from './SitesPreviewClient';
 
 export default async function SitesPreview() {
-  const [sanityProjects, categories, phantomLabGrid] = await Promise.all([
-    getAllProjects(),
-    getAllCategories(),
-    getPhantomLabGridProject(),
-  ]);
-  const projects: Project[] = [phantomLabGrid, ...sanityProjects];
+  const [sanityProjects, categories, diaSpectrum, textVideo, phantomLabGrid] =
+    await Promise.all([
+      getAllProjects(),
+      getAllCategories(),
+      getDiaSpectrumProject(),
+      getTextVideoProject(),
+      getPhantomLabGridProject(),
+    ]);
+  const projects: Project[] = [
+    diaSpectrum,
+    textVideo,
+    phantomLabGrid,
+    ...sanityProjects,
+  ];
   const initialVisible = 7;
 
   return (
