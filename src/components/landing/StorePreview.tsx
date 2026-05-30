@@ -13,7 +13,7 @@ export default function StorePreview() {
           <Text
             tag="h2"
             variant="displaySM"
-            className="text-base-900 font-display font-thin"
+            className="text-base-900 font-display font-medium tracking-tight"
           >
             Our latest templates
           </Text>

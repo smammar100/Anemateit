@@ -33,7 +33,7 @@ export default async function BlogPost({
               <Text
                 tag="h1"
                 variant="displayLG"
-                className="text-base-900 font-display font-thin"
+                className="text-base-900 font-display font-medium tracking-tight"
               >
                 {post.title}
               </Text>
@@ -81,7 +81,7 @@ export default async function BlogPost({
             <Text
               tag="h2"
               variant="displaySM"
-              className="text-base-900 font-display font-thin"
+              className="text-base-900 font-display font-medium tracking-tight"
             >
               Latest posts
             </Text>

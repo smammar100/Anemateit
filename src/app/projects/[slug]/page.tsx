@@ -121,7 +121,7 @@ export default async function ProjectPage({
             <Text
               tag="h2"
               variant="displaySM"
-              className="text-base-900 font-display font-thin mb-8 text-center"
+              className="text-base-900 font-display font-medium tracking-tight mb-8 text-center"
             >
               More animations
             </Text>

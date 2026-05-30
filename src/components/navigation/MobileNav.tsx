@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/assets/Logo';
 import Button from '@/components/fundations/elements/Button';
+import RequestAnimationModal from './RequestAnimationModal';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import { Burger } from '@/components/fundations/icons/Icons';
 import { navLinks } from '@/lib/navigation';
@@ -54,6 +55,12 @@ export default function MobileNav() {
                   {link.text}
                 </Link>
               ))}
+              <div className="flex flex-col gap-2 pt-4">
+                <RequestAnimationModal buttonClassName="flex justify-center text-center font-medium items-center duration-500 ease-in-out transition-colors focus:outline-2 focus:outline-inset focus:outline-base-300 text-base-900 bg-base-50 hover:bg-base-100 h-9 px-4 py-3 text-sm rounded-lg w-full" />
+                <Button isLink href="/pricing/" variant="default" size="sm">
+                  Support Us
+                </Button>
+              </div>
             </div>
           </Wrapper>
         </div>

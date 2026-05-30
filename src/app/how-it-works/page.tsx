@@ -11,35 +11,36 @@ export default function HowItWorksPage() {
             <Text
               tag="h1"
               variant="displayLG"
-              className="text-base-900 font-display font-thin"
+              className="text-base-900 font-display font-medium tracking-tight"
             >
-              How it works
+              About us
             </Text>
             <Text tag="p" variant="textBase" className="text-base-600 mt-4 text-balance">
-              Most animation showcases hand you a CodePen link and wish you luck. Anemate.dev
-              treats the prompt as the deliverable — so the effect lands cleanly inside the
-              tool you already use.
+              Anemate.dev is a curated library of web animations — each one packaged as a
+              prompt you can drop straight into your stack. We're a small crew of designers
+              and engineers who got tired of watching great motion stay trapped in demos.
             </Text>
             <Wrapper variant="prose" className="mt-12">
-              <h4>The prompt is the deliverable</h4>
+              <h4>Where we started</h4>
               <p>
-                Every animation ships with one artifact: a self-contained prompt. It names
-                the props, walks the AI through the mental model, and lists the knobs you
-                can tweak. The video shows the result. The prompt makes it yours.
+                Beautiful effects were everywhere, but they never traveled well. Copying a
+                CodePen meant untangling someone else's markup, build, and assumptions — and
+                hoping it survived the move. So we flipped the model: instead of you chasing
+                the code, the animation comes to you, in your framework and your conventions.
               </p>
-              <h4>Drop it into your tool</h4>
+              <h4>What we believe</h4>
               <p>
-                Paste the prompt into Claude Code, Cursor, v0, Lovable, or Bolt. The
-                animation regenerates in your stack — same effect, your component
-                conventions, your file structure. No CodePen surgery, no half-broken
-                output.
+                Motion is part of the interface, not an afterthought bolted on at the end.
+                Everything we publish is production-minded — clear props, a short mental
+                model, and honest tweak knobs. If an effect can't ship cleanly, it doesn't
+                make the cut.
               </p>
-              <h4>Built to drop in cleanly</h4>
+              <h4>Built with the community</h4>
               <p>
-                Each entry is written for low-code AI tools: one file, named props, a short
-                mental-model section, and clear tweak knobs. If you live in v0 or Lovable,
-                it just works. If you write your own React, the structure stays out of your
-                way.
+                The library grows from the people who use it as much as from us. Spot an
+                effect worth sharing? Request it, and we'll credit you as the inspiration
+                when it lands. We're building the reference we always wished existed — come
+                build it with us.
               </p>
             </Wrapper>
           </Wrapper>

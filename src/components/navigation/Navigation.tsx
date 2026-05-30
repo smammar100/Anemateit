@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import Logo from '@/components/assets/Logo';
+import Button from '@/components/fundations/elements/Button';
 import Wrapper from '@/components/fundations/containers/Wrapper';
 import MobileNav from './MobileNav';
+import RequestAnimationModal from './RequestAnimationModal';
 import { navLinks } from '@/lib/navigation';
 
 export default function Navigation() {
@@ -14,7 +16,7 @@ export default function Navigation() {
             <Link href="/" className="shrink-0 focus:outline-none" aria-label="Go to homepage">
               <Logo className="h-4 text-base-900" />
             </Link>
-            <div className="flex items-center gap-2 lg:gap-2 ml-auto">
+            <div className="flex items-center gap-4 ml-auto">
               <div className="flex items-center gap-4">
                 {navLinks.map((link) => (
                   <Link
@@ -25,6 +27,12 @@ export default function Navigation() {
                     {link.text}
                   </Link>
                 ))}
+              </div>
+              <div className="flex items-center gap-2">
+                <RequestAnimationModal />
+                <Button isLink href="/pricing/" variant="default" size="xs">
+                  Support Us
+                </Button>
               </div>
             </div>
           </div>

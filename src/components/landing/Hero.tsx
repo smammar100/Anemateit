@@ -9,7 +9,7 @@ export default function Hero() {
           <Text
             tag="h1"
             variant="displayLG"
-            className="text-base-900 font-display font-light"
+            className="text-base-900 font-display font-medium tracking-tight"
           >
             <span className="block">Don&apos;t copy code.</span>
             <span className="block">Copy the prompt.</span>

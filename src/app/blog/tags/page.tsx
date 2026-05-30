@@ -13,7 +13,7 @@ export default function TagsIndex() {
           <Text
             tag="h1"
             variant="displayLG"
-            className="text-base-900 font-display font-thin text-center"
+            className="text-base-900 font-display font-medium tracking-tight text-center"
           >
             Explore all tags
           </Text>

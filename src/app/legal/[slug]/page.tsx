@@ -26,7 +26,7 @@ export default async function LegalPage({
               <Text
                 tag="h1"
                 variant="displayLG"
-                className="text-base-900 font-display font-thin"
+                className="text-base-900 font-display font-medium tracking-tight"
               >
                 {page.page}
               </Text>

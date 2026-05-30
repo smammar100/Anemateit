@@ -15,7 +15,7 @@ export default function Logo({ className, ...rest }: SVGProps<SVGSVGElement>) {
         x="0"
         y="68"
         fontSize="84"
-        fontFamily="'Hedvig Letters Serif', serif"
+        fontFamily="'PP Kyoto', serif"
         fontWeight="400"
         letterSpacing="-2"
         fill="currentColor"

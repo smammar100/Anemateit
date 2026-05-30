@@ -37,7 +37,7 @@ export default function AdvertisePage() {
             <Text
               tag="h1"
               variant="displayLG"
-              className="text-base-900 font-display font-thin text-center"
+              className="text-base-900 font-display font-medium tracking-tight text-center"
             >
               Put your launch in front of AI-native builders
             </Text>
@@ -57,7 +57,7 @@ export default function AdvertisePage() {
                     <Text
                       tag="p"
                       variant="displaySM"
-                      className="text-base-900 text-balance font-display font-light"
+                      className="text-base-900 text-balance font-display font-medium tracking-tight"
                     >
                       {pkg.name}
                     </Text>
@@ -69,7 +69,7 @@ export default function AdvertisePage() {
                     <Text
                       tag="p"
                       variant="displayLG"
-                      className="text-base-900 font-display font-light"
+                      className="text-base-900 font-display font-medium tracking-tight"
                     >
                       {pkg.price}
                     </Text>

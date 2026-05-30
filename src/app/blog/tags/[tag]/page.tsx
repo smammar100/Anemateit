@@ -27,7 +27,7 @@ export default async function BlogTagPage({
           <Text
             tag="h1"
             variant="displayLG"
-            className="text-base-900 font-display font-thin"
+            className="text-base-900 font-display font-medium tracking-tight"
           >
             All blog posts about {decodedTag}
           </Text>

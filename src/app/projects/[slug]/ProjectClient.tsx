@@ -318,7 +318,7 @@ export default function ProjectClient({
                 <Text
                   tag="h1"
                   variant="displaySM"
-                  className="text-base-900 font-display font-light text-balance leading-tight"
+                  className="text-base-900 font-display font-medium tracking-tight text-balance leading-tight"
                 >
                   {project.title}
                 </Text>

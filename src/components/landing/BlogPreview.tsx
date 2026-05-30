@@ -16,7 +16,7 @@ export default function BlogPreview() {
           <Text
             tag="h2"
             variant="displaySM"
-            className="text-base-900 font-display font-thin"
+            className="text-base-900 font-display font-medium tracking-tight"
           >
             Latest articles
           </Text>

@@ -13,7 +13,7 @@ export default function SubmitPage() {
               <Text
                 tag="h1"
                 variant="displayMD"
-                className="text-base-900 font-display font-thin"
+                className="text-base-900 font-display font-medium tracking-tight"
               >
                 Submit your animation to Anemate.dev
               </Text>

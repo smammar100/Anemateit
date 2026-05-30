@@ -35,7 +35,7 @@ export default async function SiteTagPage({
           <Text
             tag="h1"
             variant="displayLG"
-            className="text-base-900 font-display font-light text-center max-w-xl mx-auto text-balance"
+            className="text-base-900 font-display font-medium tracking-tight text-center max-w-xl mx-auto text-balance"
           >
             Explore all sites related to {decodedTag}
           </Text>
