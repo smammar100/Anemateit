@@ -1,30 +1,65 @@
-# Animate.dev
+<p align="center">
+  <img src=".github/assets/landing.png" alt="Anemate.dev — Don't copy code. Copy the prompt." width="100%" />
+</p>
 
-> A library of web animations you can copy-paste into your favorite AI coding tool.
+<h1 align="center">Anemate.dev</h1>
 
-Every animation on Animate.dev ships with a single artifact: a **prompt**. Paste it into Claude Code, Cursor, v0, Lovable, or Bolt — and the AI regenerates the effect in your codebase. The video shows the result. The prompt makes it yours.
+<p align="center">
+  <em>Don't copy code. Copy the prompt.</em>
+</p>
+
+<p align="center">
+  <a href="#the-library">Library</a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#stack">Stack</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#adding-a-new-animation">Add an animation</a>
+</p>
 
 ---
+
+A curated library of web animations where the deliverable is a **prompt**, not a snippet. Every entry ships with a battle-tested prompt — paste it into **Claude Code, Cursor, v0, Lovable, or Bolt** and the AI regenerates the effect inside *your* codebase, with your conventions. The live demo proves it works; the prompt is the install.
 
 ## Why this exists
 
-Most animation showcases give you a CodePen link and wish you luck. That works if you write your own React. It does not work if you live in v0 / Lovable / Bolt, where copying a CodePen and praying is a recipe for half-broken output.
+Most animation showcases hand you a CodePen link and wish you luck. That's fine if you hand-write your React. It falls apart in AI-first workflows, where pasting someone else's pen into v0 or Lovable produces half-broken output with mystery globals.
 
-Animate.dev treats the prompt as the deliverable. Each entry is written to drop cleanly into a low-code AI tool — single file, named props, mental-model section, tweak knobs. The video proves it works; the prompt is the install.
+Anemate.dev treats the prompt as the product:
 
----
+- **Self-contained** — one file, zero (or declared) dependencies, full source embedded. No "see the rest on my GitHub".
+- **Mental model included** — every prompt explains *how* the effect works, so the AI (and you) can tweak it instead of cargo-culting it.
+- **Proven live** — each entry runs as a real interactive demo on the site, not a looping GIF of better days.
+
+## The library
+
+Every card on the homepage is a **live, running component** — hover them, drag them, scroll them.
+
+| Project | Technique |
+|---|---|
+| **Lissajous Curves** | The ANEMATE wordmark drawn as seven pure Lissajous figures — a verified 1:1 port of the cursor.com/compile hero engine. Phase-rewind intro, per-letter hover phase drift. Pure SVG + rAF, zero deps. |
+| **AI Sphere** | True-3D plasma orb: glass fresnel shell around volumetric FBM gas, spinnable in real 3D, with a glowing flower-bloom core and 5 colour states. Three.js + GLSL. |
+| **Dia Browser Footer Color Spectrum** | Scroll-revealed light spectrum — nine blurred gradient bars with live theme switching and randomize. GSAP. |
+| **Text Video** | CSS `background-clip: text` — a video/GIF clipped to the letterforms of your headline. Pure CSS. |
+| **Phantom Lab Grid** | Infinite WebGL grid of card tiles with momentum drag, distortion + vignette post-processing, per-tile click events. ogl + GSAP. |
+| **Morphing SVG Mask Slider** | Image slider whose transition is an organic SVG mask morph. flubber-powered path interpolation. |
+| **Liquid Reveal Hero** | SVG goo-filter blob (four spring-trailed circles merged by `feGaussianBlur` + `feColorMatrix`) used as a CSS mask. Inspired by landonorris.com. |
+| **3D Perspective Highlight** | CSS `perspective` + `preserve-3d` card with per-frame lerped custom properties driving tilt and inline-highlight lift. |
+| **Book Demo Button / Next.js Conf CTA** | Micro-interaction studies — the small stuff that makes a page feel expensive. |
+
+### Spotlight: Lissajous Curves
+
+The newest entry is a faithful decompilation of the **cursor.com/compile** hero. Every "letter" is a single parametric curve — `x = cx + A·sin(a·t + δ)`, `y = cy + B·sin(b·t)` — whose frequency ratio, phase and rotation are chosen so the raw math *evokes* the glyph. The engine port was verified **bit-exact**: loaded with the original COMPILE parameters, all seven SVG path strings hash-match the live site. Then it was re-parameterised to spell ANEMATE.
 
 ## Stack
 
 | Layer | Choice | Why |
 |---|---|---|
-| Frontend | **Astro 6** | Static-first, zero JS by default, fast |
-| CMS | **Sanity v3** (self-hosted Studio at `studio-animate.dev/`) | Project entries, video uploads, prompts as `text` |
-| Styling | **Tailwind CSS v4** | The `@import "tailwindcss"` flavor |
-| Content | **Astro Content Collections** (`src/content/`) + **Sanity** (projects) | Static markdown for blog/legal/sites; Sanity for the live project library |
-| Hosting | Anywhere static (Vercel / Netlify / Cloudflare Pages) | Sanity CDN serves videos directly |
-
----
+| Framework | **Next.js 15** (App Router) + **React 19** | Server components for the library shell, client islands for the demos |
+| CMS | **Sanity** (Studio in `studio-animate.dev/`) | Project entries, video uploads; prompts override from the repo |
+| Content | **Velite** (`content/`) | Typed markdown collections for blog / legal / sites / store |
+| Styling | **Tailwind CSS v4** | The `@import "tailwindcss"` flavour, design tokens via `--color-base-*` |
+| Animation | **GSAP · Three.js · ogl · framer-motion · flubber** | Each demo uses the lightest tool that does the job |
+| Search | **Fuse.js** | `⌘K` fuzzy search over the library |
 
 ## Quick start
 
@@ -33,170 +68,80 @@ git clone https://github.com/smammar100/Anemateit.git
 cd Anemateit
 npm install
 
-# Astro frontend
-cp .env.example .env.local        # fill in your Sanity project ID + token
-npm run dev                       # → http://localhost:4321
-
-# Sanity Studio (in a second terminal)
-cd studio-animate.dev
-npm install
-npm run dev                       # → http://localhost:3333
+cp .env.example .env.local   # fill in the Sanity values below
+npm run dev                  # velite watch + next dev → http://localhost:3000
 ```
-
-Required env vars (see `.env.example`):
 
 ```ini
-PUBLIC_SANITY_PROJECT_ID=tgexqefn
-PUBLIC_SANITY_DATASET=production
-PUBLIC_SANITY_API_VERSION=2025-01-01
-SANITY_API_TOKEN=                 # only needed for the upload scripts
+# .env.local
+NEXT_PUBLIC_SANITY_PROJECT_ID=…
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2025-01-01
+SANITY_API_TOKEN=            # only for the scripts/ utilities
 ```
 
----
+Sanity Studio runs separately when you need it:
+
+```bash
+npm run studio:dev           # → http://localhost:3333
+```
+
+> **Worktree tip:** `.env.local` is gitignored — fresh git worktrees need it copied from the main checkout or every route 500s on the missing Sanity project ID.
 
 ## Architecture
 
 ```
 .
-├── src/                          # Astro frontend
-│   ├── pages/
-│   │   ├── index.astro           # Homepage — project grid pulled from Sanity
-│   │   └── projects/[slug].astro # Detail page — split layout, copy-prompt UX
-│   ├── lib/
-│   │   ├── sanity.ts             # Client + urlFor + fileUrl helpers
-│   │   ├── queries.ts            # GROQ queries (getAllProjects, getProjectBySlug, …)
-│   │   └── types.ts              # Project, Slug, ThumbnailType
-│   └── content/                  # Astro Collections (blog, legal, sites, store)
+├── src/
+│   ├── app/                      # Next.js App Router
+│   │   ├── page.tsx              # Homepage — live-demo project grid
+│   │   └── projects/[slug]/      # Detail page — demo + copy-prompt panel
+│   ├── components/
+│   │   ├── lissajous/  ai-sphere/  dia-spectrum/  phantom-lab-grid/ …
+│   │   │                         # One folder per animation (demo + engine)
+│   │   ├── landing/              # Homepage sections
+│   │   └── projects/             # ProjectCard, grids, copy-prompt UX
+│   └── lib/
+│       ├── synthetic-projects.ts # Code-defined entries (no Sanity doc needed)
+│       ├── sanity.ts · queries.ts· types.ts
+│       └── utils.ts
 │
+├── prompts/                      # ★ Canonical copy-prompts, one .md per slug
+│                                 #   The detail page prefers these over Sanity
+├── content/                      # Velite collections (blog, legal, sites, store)
 ├── studio-animate.dev/           # Embedded Sanity Studio
-│   └── schemaTypes/project.ts    # Project schema definition
-│
-├── prompts/                      # Canonical copy-prompt source files
-│   ├── 3d-perspective-highlight.md
-│   ├── 3d-perspective-highlight.meta.json   # technologies array, etc.
-│   └── liquid-reveal-hero.md
-│
-└── scripts/                      # Sanity write utilities
-    ├── createLandoEntry.mjs      # One-off: create a project entry with uploaded video
-    ├── syncPrompts.mjs           # Patch all entries from prompts/<slug>.md (+ .meta.json)
-    ├── updateLandoPrompt.mjs     # Patch a single entry's copyPrompt
-    ├── listProjects.mjs          # Quick inspector
-    └── inspectVideo.mjs          # See which video asset a project references
+└── scripts/                      # Sanity write utilities (sync, inspect, dump)
 ```
 
----
+**Prompts are source-of-truth.** `prompts/<slug>.md` is read at request time (`loadPromptFile`) and wins over the Sanity `copyPrompt` field — so a prompt edit is a git commit, reviewable like any other code change.
 
-## Current projects
+**Synthetic projects.** An animation doesn't need a CMS entry to ship. Register it in `src/lib/synthetic-projects.ts` and it appears in the grid and gets a detail route — remove it once a real Sanity doc with the same slug is published.
 
-| Title | Technique | Source |
-|---|---|---|
-| **3D Perspective Highlight** | CSS `perspective` + `transform-style: preserve-3d` + per-frame lerp of two CSS custom properties (`--rx`, `--ry`, `--lift`). Inline highlight spans read `--lift` to drive translate + box-shadow in opposite directions. | [CodePen](https://codepen.io/smammar14/pen/VYmbVzK) |
-| **Liquid Reveal Hero** | SVG `feGaussianBlur` + `feColorMatrix` "goo" filter merging four spring-trailed `<circle>` elements into a single organic blob, used as a CSS `mask` on the reveal image. Inspired by landonorris.com (OFF+BRAND). | [GitHub (reference)](https://github.com/BrunoCarvalhoFeitosa/lando-norris) |
+## Adding a new animation
 
-Each entry ships with the same template structure: a one-line goal, install command, drop-in component, a "how it works" mental model, a tweak-knobs table, accessibility notes.
+1. **Build the component** under `src/components/<slug>/` — the real engine plus a `<Name>Demo` wrapper with a `compact` mode for the card.
+2. **Write the prompt** at `prompts/<slug>.md` — self-contained, full source embedded, "how it works" section, tweak knobs.
+3. **Register it** in `src/lib/synthetic-projects.ts` (slug, title, description, technologies).
+4. **Wire the surfaces** — card branch in `ProjectCard.tsx`, live-demo entry in `ProjectClient.tsx`, homepage list in `SitesPreview.tsx`, slug fallback in `projects/[slug]/page.tsx`.
+5. **Verify** — `localhost:3000` card renders, `/projects/<slug>` demo runs, Copy Prompt copies the markdown.
 
----
-
-## Adding a new project
-
-1. **Build the standalone** — a separate Vite/Next.js project that demonstrates the effect at full quality. Get it on Vercel or GitHub Pages.
-2. **Record a 5–10s loop** at 1920×1080, export as MP4 (target <12MB) — same playback shape as the existing entries.
-3. **Write the prompt** in `prompts/<slug>.md` using the [template](#prompt-template). Optional sidecar `prompts/<slug>.meta.json` for technologies, viewCodeUrl, etc.
-4. **Upload the video** through Sanity Studio at `localhost:3333` (Project → New → Thumbnail Type: Video → drag MP4 in).
-5. **Run the sync script** — pushes the prompt + meta into the existing Sanity doc:
-   ```bash
-   node scripts/syncPrompts.mjs
-   ```
-6. **Verify** — open `localhost:4321/projects/<slug>`. Video plays, prompt copies, View Code link works.
-
-### Prompt template
-
-Every prompt in `prompts/` follows the same shape. This is what makes them v0/Lovable/Bolt-friendly:
-
-```markdown
-# <Effect name>
-
-<One-paragraph goal — what this is, what stack it targets.>
-
-**Stack:** React + Tailwind + <library>. Drop-in single file.
-
-## Install
-\`\`\`bash
-npm i <whatever>
-\`\`\`
-
-## Component (paste into `components/<Name>.tsx`)
-\`\`\`tsx
-'use client';
-// … the whole component, one file, named props
-\`\`\`
-
-## Use it
-\`\`\`tsx
-<Component prop="…" />
-\`\`\`
-
-## How it works (mental model)
-1. <One sentence per step. Aim for 3–5 steps.>
-
-## Tweak knobs
-| Want | Change |
-|---|---|
-| Bigger / smaller | `<prop>` |
-| Faster / slower | `<prop>` |
-
-## Accessibility
-- Reduced motion: <what happens>
-- Touch / no-cursor: <what happens>
-```
-
----
-
-## Scripts reference
+## Scripts
 
 | Command | Purpose |
 |---|---|
-| `npm run dev` | Astro dev server on `:4321` |
-| `npm run build` | Build static site to `./dist/` |
-| `npm run preview` | Preview the production build locally |
-| `node scripts/listProjects.mjs` | List all Sanity project entries with prompt lengths |
-| `node scripts/syncPrompts.mjs` | Push every `prompts/<slug>.md` (+ `.meta.json`) to its Sanity doc |
-| `node scripts/inspectVideo.mjs <slug>` | See which video asset a project references |
-| `node scripts/dumpPrompt.mjs <slug>` | Dump a Sanity project's current prompt to a local file |
-
----
-
-## Copy-prompt UX
-
-The detail page renders the prompt in a scrollable `<pre>` with a bottom fade gradient (`linear-gradient(to top, var(--color-base-50), transparent)`) that auto-hides once the user scrolls to the end. Both the inline "Copy" icon and the main "Copy Prompt" button share a single click handler that:
-
-1. Tries `navigator.clipboard.writeText`
-2. Falls back to a hidden `<textarea>` + `document.execCommand('copy')` for non-secure contexts
-3. Swaps the button label to "Copied ✓" for 2s
-4. Shows a toast: *"Prompt copied — paste into Claude Code, Cursor, v0, or Lovable"*
-5. Logs `[animate.dev] prompt_copied` for analytics
-
-The whole thing is data-driven via `data-prompt` attributes — no per-project JS.
-
----
-
-## Deployment notes
-
-- `dist/` is the build output. Drop it on any static host.
-- Sanity videos are served from `cdn.sanity.io` with a 1-year `Cache-Control`. They never hit your server.
-- `.env.local` is gitignored. Set `SANITY_API_TOKEN` on the host **only** if you run the sync scripts in CI; the Astro build itself only needs the public project ID + dataset.
-- Re-run the build whenever you publish a Sanity change. (Or set up a webhook from Sanity → your host's deploy trigger.)
-
----
+| `npm run dev` | Velite watch + Next dev server on `:3000` |
+| `npm run build` | `velite build && next build` |
+| `npm run studio:dev` | Sanity Studio on `:3333` |
+| `node scripts/syncPrompts.mjs` | Push every `prompts/<slug>.md` into its Sanity doc |
+| `node scripts/listProjects.mjs` | List Sanity entries with prompt lengths |
+| `node scripts/inspectVideo.mjs <slug>` | Which video asset a project references |
 
 ## Acknowledgments
 
-- Built on top of the [Lexington Carbon](https://lexingtonthemes.com/templates/carbon) Astro theme — kept the design tokens (`--color-base-*`), wrapper grid, and typography scale.
-- Sanity Studio scaffolded via `npm create sanity@latest`.
-- Liquid Reveal Hero technique credit: [Bruno Carvalho Feitosa's open-source recreation](https://github.com/BrunoCarvalhoFeitosa/lando-norris) of the landonorris.com hero (OFF+BRAND, Awwwards SOTD).
-
----
+- Design foundation: [Lexington Carbon](https://lexingtonthemes.com/templates/carbon) tokens and typography scale, heavily reworked.
+- Lissajous engine: a study of the [cursor.com/compile](https://cursor.com/compile) event hero; curve technique reference from [jak_e's CodePen](https://codepen.io/jak_e/pen/ZvwgOg).
+- Liquid Reveal technique: [Bruno Carvalho Feitosa's recreation](https://github.com/BrunoCarvalhoFeitosa/lando-norris) of the landonorris.com hero (OFF+BRAND).
 
 ## License
 
-UNLICENSED — private project. If you want to reuse any of the prompts or scaffolding, open an issue.
+UNLICENSED — private project. Want to reuse a prompt or the scaffolding? Open an issue.
