@@ -13,6 +13,7 @@ export const TEXT_VIDEO_SLUG = 'text-video';
 export const DIA_SPECTRUM_SLUG = 'dia-browser-footer-color-spectrum';
 export const AI_SPHERE_SLUG = 'ai-sphere';
 export const PHANTOM_LAB_GRID_SLUG = 'phantom-lab-grid';
+export const LISSAJOUS_SLUG = 'lissajous-curves';
 
 const promptFileCache = new Map<string, string | null>();
 const SLUG_RE = /^[a-z0-9-]+$/;
@@ -103,6 +104,21 @@ export async function getPhantomLabGridProject(): Promise<Project> {
       'Infinite WebGL grid of card tiles with momentum drag, distortion + vignette post-processing, and per-tile click events. Built on ogl + gsap.',
     thumbnailType: 'gif',
     technologies: ['React', 'TypeScript', 'WebGL', 'ogl', 'GSAP'],
+    copyPrompt,
+  };
+}
+
+export async function getLissajousProject(): Promise<Project> {
+  const copyPrompt = (await loadPromptFile(LISSAJOUS_SLUG)) ?? '';
+  return {
+    _id: 'synthetic-lissajous-curves',
+    _type: 'project',
+    title: 'Lissajous Curves',
+    slug: { _type: 'slug', current: LISSAJOUS_SLUG },
+    description:
+      'The ANEMATE wordmark as seven pure Lissajous curves — a faithful port of the cursor.com/compile hero engine. Each letter settles in with a staggered phase-spin intro; hover a letter and its phase drifts, morphing the curve, then relaxes back on leave. Pure SVG + requestAnimationFrame, zero dependencies.',
+    thumbnailType: 'gif',
+    technologies: ['React', 'TypeScript', 'SVG', 'Lissajous'],
     copyPrompt,
   };
 }

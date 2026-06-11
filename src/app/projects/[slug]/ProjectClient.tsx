@@ -15,6 +15,7 @@ import PhantomLabGridClient from '@/components/phantom-lab-grid/PhantomLabGridCl
 import TextVideoDemo from '@/components/text-video/TextVideoDemo';
 import DiaSpectrumFooterDemo from '@/components/dia-spectrum/DiaSpectrumFooterDemo';
 import AISphereDemo from '@/components/ai-sphere/AISphereDemo';
+import LissajousDemo from '@/components/lissajous/LissajousDemo';
 import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
 import type { Project } from '@/lib/types';
 
@@ -109,6 +110,11 @@ export default function ProjectClient({
         <AISphereDemo />
       </div>
     ),
+    'lissajous-curves': () => (
+      <div className="relative w-full h-full min-h-[26rem] bg-[#EDECE8]">
+        <LissajousDemo />
+      </div>
+    ),
     'morphing-svg-mask-slider': () => (
       <div className="w-full max-w-4xl mx-auto">
         <MorphingSvgMaskSlider
@@ -145,6 +151,7 @@ export default function ProjectClient({
 
   const demoCaptions: Record<string, string> = {
     'dia-browser-footer-color-spectrum': 'Scroll to see the magic.',
+    'lissajous-curves': 'Hover each letter — its curve drifts through phase space, then settles back.',
   };
   const demoCaption =
     demoCaptions[project.slug.current] ?? 'Live demo — interact with it.';
