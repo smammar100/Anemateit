@@ -68,16 +68,8 @@ git clone https://github.com/smammar100/Anemateit.git
 cd Anemateit
 npm install
 
-cp .env.example .env.local   # fill in the Sanity values below
+cp .env.example .env.local   # fill in your Sanity credentials
 npm run dev                  # velite watch + next dev → http://localhost:3000
-```
-
-```ini
-# .env.local
-NEXT_PUBLIC_SANITY_PROJECT_ID=…
-NEXT_PUBLIC_SANITY_DATASET=production
-NEXT_PUBLIC_SANITY_API_VERSION=2025-01-01
-SANITY_API_TOKEN=            # only for the scripts/ utilities
 ```
 
 Sanity Studio runs separately when you need it:
