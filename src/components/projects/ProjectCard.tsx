@@ -9,6 +9,7 @@ import TextVideoDemo from '@/components/text-video/TextVideoDemo';
 import DiaSpectrumFooterDemo from '@/components/dia-spectrum/DiaSpectrumFooterDemo';
 import AISphereDemo from '@/components/ai-sphere/AISphereDemo';
 import LissajousDemo from '@/components/lissajous/LissajousDemo';
+import LissajousAmmarDemo from '@/components/lissajous-ammar/LissajousAmmarDemo';
 import type { Project } from '@/lib/types';
 
 const CARD_IMAGES = [
@@ -28,6 +29,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   const isNextjsConfCta = project.slug.current === 'nextjs-conf-cta';
   const isPhantomLabGrid = project.slug.current === 'phantom-lab-grid';
   const isLissajous = project.slug.current === 'lissajous-curves';
+  const isLissajousAmmar = project.slug.current === 'lissajous-ammar';
   const url = `/projects/${project.slug.current}`;
 
   const videoSrc =
@@ -57,6 +59,10 @@ export default function ProjectCard({ project }: { project: Project }) {
         ) : isLissajous ? (
           <div className="aspect-[8/5] w-full rounded shadow overflow-hidden bg-[#EDECE8]">
             <LissajousDemo compact />
+          </div>
+        ) : isLissajousAmmar ? (
+          <div className="aspect-[8/5] w-full rounded shadow overflow-hidden bg-[#EDECE8]">
+            <LissajousAmmarDemo compact />
           </div>
         ) : isDiaSpectrum ? (
           <div className="aspect-[8/5] w-full rounded shadow overflow-hidden">

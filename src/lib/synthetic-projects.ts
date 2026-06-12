@@ -14,6 +14,7 @@ export const DIA_SPECTRUM_SLUG = 'dia-browser-footer-color-spectrum';
 export const AI_SPHERE_SLUG = 'ai-sphere';
 export const PHANTOM_LAB_GRID_SLUG = 'phantom-lab-grid';
 export const LISSAJOUS_SLUG = 'lissajous-curves';
+export const LISSAJOUS_AMMAR_SLUG = 'lissajous-ammar';
 
 const promptFileCache = new Map<string, string | null>();
 const SLUG_RE = /^[a-z0-9-]+$/;
@@ -104,6 +105,21 @@ export async function getPhantomLabGridProject(): Promise<Project> {
       'Infinite WebGL grid of card tiles with momentum drag, distortion + vignette post-processing, and per-tile click events. Built on ogl + gsap.',
     thumbnailType: 'gif',
     technologies: ['React', 'TypeScript', 'WebGL', 'ogl', 'GSAP'],
+    copyPrompt,
+  };
+}
+
+export async function getLissajousAmmarProject(): Promise<Project> {
+  const copyPrompt = (await loadPromptFile(LISSAJOUS_AMMAR_SLUG)) ?? '';
+  return {
+    _id: 'synthetic-lissajous-ammar',
+    _type: 'project',
+    title: 'Lissajous AMMAR',
+    slug: { _type: 'slug', current: LISSAJOUS_AMMAR_SLUG },
+    description:
+      'The AMMAR wordmark as five pure Lissajous curves — the cursor.com/compile hero engine re-parameterised to spell a name. A and M reuse the ANEMATE glyph recipes; R is built from existing recipes only — two straight "I" strokes (stem + leg) and a tilted "A" lens as the bowl. Staggered phase-spin intro, per-letter hover drift.',
+    thumbnailType: 'gif',
+    technologies: ['React', 'TypeScript', 'SVG', 'Lissajous'],
     copyPrompt,
   };
 }

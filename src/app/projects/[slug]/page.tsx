@@ -19,6 +19,8 @@ import {
   AI_SPHERE_SLUG,
   getLissajousProject,
   LISSAJOUS_SLUG,
+  getLissajousAmmarProject,
+  LISSAJOUS_AMMAR_SLUG,
   loadPromptFile,
 } from '@/lib/synthetic-projects';
 import type { CardData } from '@/components/phantom-lab-grid/grid-engine/types';
@@ -60,6 +62,9 @@ export default async function ProjectPage({
   }
   if (!project && slug === LISSAJOUS_SLUG) {
     project = await getLissajousProject();
+  }
+  if (!project && slug === LISSAJOUS_AMMAR_SLUG) {
+    project = await getLissajousAmmarProject();
   }
   if (!project) notFound();
 
